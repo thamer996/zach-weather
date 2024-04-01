@@ -1,17 +1,21 @@
-import React from 'react';
-import './App.css';
+import React from "react";
+import "./App.css";
 // Importez votre composant WindyMap depuis le bon chemin
-import Data from './Data';
+import Data from "./Data";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import Home from "./home";
+import Historical from "./Historical";
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <h1>Map</h1>
-      </header>
-      <Data />
-       {/* Utilisez le composant WindyMap ici */}
-    </div>
+    <Router>
+      <Routes>
+        <Route path="/" element={<Home />} />
+        <Route path="/history" element={<Historical />} />
+
+        {/* A //<Route path="/table" element={<Hi />} /> */}
+      </Routes>
+    </Router>
   );
 }
 

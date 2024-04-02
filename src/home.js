@@ -1,16 +1,17 @@
+// Home.js
 import React from "react";
 import "./App.css";
-// Importez votre composant WindyMap depuis le bon chemin
-import Data from "./Data";
+import WindyMap from "./WindyMap";
+import Data from "./Data" // Make sure the path is correct
 
 function Home() {
   return (
     <div className="App">
-      <header className="App-header">
-        <h1>Map</h1>
-      </header>
+      
+      <WindyMap />
       <Data />
-      {/* Utilisez le composant WindyMap ici */}
+     
+      {/* Now using the WindyMap component */}
     </div>
   );
 }

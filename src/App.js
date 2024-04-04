@@ -10,7 +10,7 @@ function App() {
   return (
     <Router>
       <Routes>
-        <Route path="/" element={<Home />} />
+        <Route path="/home" element={<Home />} />
         <Route path="/history" element={<Historical />} />
 
         {/* A //<Route path="/table" element={<Hi />} /> */}

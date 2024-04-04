@@ -6,6 +6,9 @@ import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TablePagination from "@mui/material/TablePagination";
 import TableRow from "@mui/material/TableRow";
+import ResponsiveAppBar from "./navbar";
+import { TextField, FormControl, InputLabel, Select, MenuItem,Grid } from '@mui/material';
+
 
 const Historical = () => {
   const rows = [
@@ -111,6 +114,17 @@ const Historical = () => {
     { id: "sunelevation", label: "sunelevation", minWidth: 50 },
     { id: "severerisk", label: "severerisk", minWidth: 50 },
   ];
+  const options = [
+    "C Coast North", "C Coast South", "C Coast Tip", "C Corpus Christi",
+    "E East Ex", "Houston Central", "Houston North", "Houston South",
+    "N Far East", "N Seymour", "N Sherman", "N Wichita Falls",
+    "NC Dallas Central", "NC Dallas East", "NC Dallas South", "NC Fort Worth",
+    "NC West", "PH Amarillo NE", "PH Amarillo NW", "PH Amarillo S",
+    "PH Plainview", "S NELOB", "S NELOB 2", "S San Antonio",
+    "SC Austin Central", "SC Austin South", "SC Killeen", "W Abilene",
+    "W Bigspring", "W Brady", "W Del Rio", "W Far Fort Stockton",
+    "W Lubbock", "W McCamey", "W Odessa", "W San Angelo",
+  ]; 
 
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(-1); // Display all rows
@@ -122,9 +136,77 @@ const Historical = () => {
   const handleChangeRowsPerPage = (event) => {
     setRowsPerPage(parseInt(event.target.value, 10));
   };
+  const [filter, setFilter] = React.useState({
+    temp: '',
+    humidity: '',
+    date: '',
+  });
 
   return (
-    <TableContainer>
+    <div>
+    <ResponsiveAppBar/>
+    <TableContainer style={{margin:"20px"}}>
+    <Grid container spacing={2} alignItems="center">
+    <Grid item>
+      <InputLabel id="temperature-select-label" style={{ marginRight: 10 }}>Position</InputLabel>
+    </Grid>
+    <Grid item>
+    <FormControl variant="outlined" size="small">
+  <Select
+    labelId="location-select-label" // Changed the labelId to be more relevant
+    value={filter.location} // Assuming you're filtering by location now
+    onChange={(e) => setFilter({ ...filter, location: e.target.value })}
+    style={{ minWidth: 120 }} // Set a minimum width for the Select
+  >
+    {options.map((option, index) => (
+      <MenuItem key={index} value={option}>{option}</MenuItem>
+    ))}
+  </Select>
+</FormControl>
+    </Grid>
+
+    <Grid item>
+  <InputLabel htmlFor="start-date" style={{ marginRight: 10 }}>Start Date</InputLabel>
+</Grid>
+<Grid item>
+  <FormControl variant="outlined" size="small">
+    <TextField
+      id="start-date"
+      label="Start Date"
+      type="date"
+      InputLabelProps={{ shrink: true }}
+      value={filter.startDate}
+      onChange={(e) => setFilter({ ...filter, startDate: e.target.value })}
+      InputProps={{ inputProps: { min: "2020-01-01",  max: new Date().toISOString().split('T')[0] } }} // Restrict dates before January 1, 2020
+    />
+  </FormControl>
+</Grid>
+
+    
+
+    <Grid item>
+      <InputLabel htmlFor="end-date" style={{ marginRight: 10 }}>End Date</InputLabel>
+    </Grid>
+    <Grid item>
+      <FormControl variant="outlined" size="small">
+        <TextField
+          id="end-date"
+          type="date"
+          InputLabelProps={{ shrink: true }}
+          value={filter.endDate}
+          onChange={(e) => setFilter({ ...filter, endDate: e.target.value })}
+          InputProps={{
+            inputProps: {
+// Restrict dates before January 1, 2020
+              max: new Date().toISOString().split('T')[0] // Set max date as today's date
+            }
+          }}
+        />
+      </FormControl>
+    </Grid>
+  </Grid>
+
+
       <Table>
         <TableHead>
           <TableRow>
@@ -186,6 +268,7 @@ const Historical = () => {
         rowsPerPageOptions={[10, 25, 100, { value: -1, label: "All" }]} // Add 'All' option
       />
     </TableContainer>
+    </div>
   );
 };
 

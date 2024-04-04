@@ -24,7 +24,7 @@ import {
 
 function Data() {
   const [page, setPage] = useState(0);
-  const [rowsPerPage, setRowsPerPage] = useState(15);
+  const [rowsPerPage, setRowsPerPage] = useState(24);
 
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
@@ -70,6 +70,7 @@ function Data() {
     "W Odessa",
     "W San Angelo",
   ];
+  
 
   const currentDate = new Date();
 
@@ -100,7 +101,7 @@ function Data() {
     if (selectedPointName) {
       try {
         const response = await axios.post(
-          "http://localhost:5000/download-weather",
+          "http://192.168.1.175:5000/download-weather",
           {
             point_name: selectedPointName,
           }
@@ -215,7 +216,7 @@ function Data() {
           </select>
         </div>
       </FormControl>
-      <TableContainer style={{ maxHeight: 800 }}>
+      <TableContainer style={{ maxHeight: 1000 }}>
         <Table stickyHeader aria-label="sticky table">
           <TableHead>
             <TableRow>
@@ -260,7 +261,7 @@ function Data() {
         </Table>
       </TableContainer>
       <TablePagination
-        rowsPerPageOptions={[16, 25, 100]}
+        rowsPerPageOptions={[24,48,96]}
         component="div"
         count={rows.length}
         rowsPerPage={rowsPerPage}

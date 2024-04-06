@@ -70,7 +70,6 @@ function Data() {
     "W Odessa",
     "W San Angelo",
   ];
-  
 
   const currentDate = new Date();
 
@@ -101,7 +100,7 @@ function Data() {
     if (selectedPointName) {
       try {
         const response = await axios.post(
-          "http://192.168.1.175:5000/download-weather",
+          "http://127.0.0.1:5000/download-weather",
           {
             point_name: selectedPointName,
           }
@@ -261,7 +260,7 @@ function Data() {
         </Table>
       </TableContainer>
       <TablePagination
-        rowsPerPageOptions={[24,48,96]}
+        rowsPerPageOptions={[24, 48, 96]}
         component="div"
         count={rows.length}
         rowsPerPage={rowsPerPage}

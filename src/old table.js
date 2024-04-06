@@ -10,7 +10,15 @@ import TableRow from "@mui/material/TableRow";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { FormControl, InputLabel, Select, MenuItem } from "@mui/material";
 import axios from "axios";
-
+import { useEffect } from "react";
+import {
+  faWalking,
+  faRunning,
+  faBiking,
+  faCar,
+  faBus,
+  faTint,
+} from "@fortawesome/free-solid-svg-icons";
 import {
   faCloudShowersHeavy,
   faSnowflake,
@@ -18,9 +26,12 @@ import {
   faTemperatureHigh,
   faSun,
   faCloud,
+  faArrowUp,
+  faArrowDown,
   faArrowLeft,
   faArrowRight,
 } from "@fortawesome/free-solid-svg-icons";
+import { faTachometerAlt } from "@fortawesome/free-solid-svg-icons";
 
 function Data() {
   const [page, setPage] = useState(0);
@@ -94,39 +105,7 @@ function Data() {
     setPage(0);
   };
 
-  const handleChange = async (event) => {
-    const selectedPointName = event.target.value;
-    setSelectedOption(selectedPointName);
-    if (selectedPointName) {
-      try {
-        const response = await axios.post(
-          "http://localhost:5000/download-weather",
-          {
-            point_name: selectedPointName,
-          }
-        );
-        if (
-          response.data &&
-          response.data.days &&
-          Array.isArray(response.data.days)
-        ) {
-          // Extraction des données météorologiques à partir du tableau 'days'
-          const weatherDataFromDays = response.data.days
-            .map((day) => day.hours)
-            .flat();
-          setWeatherData(weatherDataFromDays);
-        } else {
-          console.error("Invalid weather data format:", response.data);
-        }
-      } catch (error) {
-        console.error("Error fetching weather data:", error);
-      }
-    } else {
-      setWeatherData([]);
-    }
-  };
-
-  const columns = [
+  const columns1 = [
     { id: "name", label: "Hour" },
 
     {
@@ -143,1581 +122,208 @@ function Data() {
       align: "right",
       format: (value) => value.toLocaleString("en-US"),
     },
-    {
-      id: "three",
-      label: "3",
-      minWidth: 15, // Adjusted minWidth for Size
-      align: "right",
-      format: (value) => value.toLocaleString("en-US"),
-    },
-    {
-      id: "four",
-      label: "4	",
-      minWidth: 15, // Adjusted minWidth for Density
-      align: "right",
-      format: (value) => value.toLocaleString("en-US"),
-    },
-    {
-      id: "five",
-      label: "5",
-      minWidth: 15, // Adjusted minWidth for Density
-      align: "right",
-      format: (value) => value.toLocaleString("en-US"),
-    },
-    {
-      id: "six",
-      label: "6",
-      minWidth: 15, // Adjusted minWidth for Density
-      align: "right",
-      format: (value) => value.toLocaleString("en-US"),
-    },
-    {
-      id: "seven",
-      label: "7",
-      minWidth: 15, // Adjusted minWidth for Density
-      align: "right",
-      format: (value) => value.toLocaleString("en-US"),
-    },
-    {
-      id: "height",
-      label: "8",
-      minWidth: 15, // Adjusted minWidth for Density
-      align: "right",
-      format: (value) => value.toLocaleString("en-US"),
-    },
-    {
-      id: "nine",
-      label: "9",
-      minWidth: 15, // Adjusted minWidth for Density
-      align: "right",
-      format: (value) => value.toLocaleString("en-US"),
-    },
-    {
-      id: "ten",
-      label: "10",
-      minWidth: 15, // Adjusted minWidth for Density
-      align: "right",
-      format: (value) => value.toLocaleString("en-US"),
-    },
-    {
-      id: "eleven",
-      label: "11",
-      minWidth: 15, // Adjusted minWidth for Density
-      align: "right",
-      format: (value) => value.toLocaleString("en-US"),
-    },
-    {
-      id: "twelve",
-      label: "12",
-      minWidth: 15, // Adjusted minWidth for Density
-      align: "right",
-      format: (value) => value.toLocaleString("en-US"),
-    },
-    {
-      id: "therteen",
-      label: "13",
-      minWidth: 15, // Adjusted minWidth for Density
-      align: "right",
-      format: (value) => value.toLocaleString("en-US"),
-    },
-    {
-      id: "fourteen",
-      label: "14",
-      minWidth: 15, // Adjusted minWidth for Density
-      align: "right",
-      format: (value) => value.toLocaleString("en-US"),
-    },
-    {
-      id: "fifteen",
-      label: "15",
-      minWidth: 15, // Adjusted minWidth for Density
-      align: "right",
-      format: (value) => value.toLocaleString("en-US"),
-    },
-    {
-      id: "sixteen",
-      label: "16",
-      minWidth: 15, // Adjusted minWidth for Density
-      align: "right",
-      format: (value) => value.toLocaleString("en-US"),
-    },
-    {
-      id: "seventeen",
-      label: "17",
-      minWidth: 15, // Adjusted minWidth for Density
-      align: "right",
-      format: (value) => value.toLocaleString("en-US"),
-    },
-    {
-      id: "heighteen",
-      label: "18",
-      minWidth: 15, // Adjusted minWidth for Density
-      align: "right",
-      format: (value) => value.toLocaleString("en-US"),
-    },
-    {
-      id: "nineteen",
-      label: "19",
-      minWidth: 15, // Adjusted minWidth for Density
-      align: "right",
-      format: (value) => value.toLocaleString("en-US"),
-    },
-    {
-      id: "twenty",
-      label: "20",
-      minWidth: 15, // Adjusted minWidth for Density
-      align: "right",
-      format: (value) => value.toLocaleString("en-US"),
-    },
-    {
-      id: "twentyone",
-      label: "21",
-      minWidth: 15, // Adjusted minWidth for Density
-      align: "right",
-      format: (value) => value.toLocaleString("en-US"),
-    },
-
-    {
-      id: "twentytwo",
-      label: "22",
-      minWidth: 15, // Adjusted minWidth for Density
-      align: "right",
-      format: (value) => value.toLocaleString("en-US"),
-    },
-
-    {
-      id: "twentythree",
-      label: "23",
-      minWidth: 15, // Adjusted minWidth for Density
-      align: "right",
-      format: (value) => value.toLocaleString("en-US"),
-    },
-    {
-      id: "zero",
-      label: "0",
-      minWidth: 15, // Adjusted minWidth for Density
-      align: "right",
-      format: (value) => value.toLocaleString("en-US"),
-    },
-    {
-      id: "next day",
-      label: "|",
-      minWidth: 15, // Adjusted minWidth for Density
-      align: "right",
-      format: (value) => value.toLocaleString("en-US"),
-    },
-    {
-      id: "one",
-      label: "1",
-      minWidth: 1, // Adjusted minWidth for Population
-      align: "right",
-      format: (value) => value.toLocaleString("en-US"),
-    },
-    {
-      id: "two",
-      label: "2",
-      minWidth: 15, // Adjusted minWidth for Population
-      align: "right",
-      format: (value) => value.toLocaleString("en-US"),
-    },
-    {
-      id: "three",
-      label: "3",
-      minWidth: 15, // Adjusted minWidth for Size
-      align: "right",
-      format: (value) => value.toLocaleString("en-US"),
-    },
-    {
-      id: "four",
-      label: "4	",
-      minWidth: 15, // Adjusted minWidth for Density
-      align: "right",
-      format: (value) => value.toLocaleString("en-US"),
-    },
-    {
-      id: "five",
-      label: "5",
-      minWidth: 15, // Adjusted minWidth for Density
-      align: "right",
-      format: (value) => value.toLocaleString("en-US"),
-    },
-    {
-      id: "six",
-      label: "6",
-      minWidth: 15, // Adjusted minWidth for Density
-      align: "right",
-      format: (value) => value.toLocaleString("en-US"),
-    },
-    {
-      id: "seven",
-      label: "7",
-      minWidth: 15, // Adjusted minWidth for Density
-      align: "right",
-      format: (value) => value.toLocaleString("en-US"),
-    },
-    {
-      id: "height",
-      label: "8",
-      minWidth: 15, // Adjusted minWidth for Density
-      align: "right",
-      format: (value) => value.toLocaleString("en-US"),
-    },
-    {
-      id: "nine",
-      label: "9",
-      minWidth: 15, // Adjusted minWidth for Density
-      align: "right",
-      format: (value) => value.toLocaleString("en-US"),
-    },
-    {
-      id: "ten",
-      label: "10",
-      minWidth: 15, // Adjusted minWidth for Density
-      align: "right",
-      format: (value) => value.toLocaleString("en-US"),
-    },
-    {
-      id: "eleven",
-      label: "11",
-      minWidth: 15, // Adjusted minWidth for Density
-      align: "right",
-      format: (value) => value.toLocaleString("en-US"),
-    },
-    {
-      id: "twelve",
-      label: "12",
-      minWidth: 15, // Adjusted minWidth for Density
-      align: "right",
-      format: (value) => value.toLocaleString("en-US"),
-    },
-    {
-      id: "therteen",
-      label: "13",
-      minWidth: 15, // Adjusted minWidth for Density
-      align: "right",
-      format: (value) => value.toLocaleString("en-US"),
-    },
-    {
-      id: "fourteen",
-      label: "14",
-      minWidth: 15, // Adjusted minWidth for Density
-      align: "right",
-      format: (value) => value.toLocaleString("en-US"),
-    },
-    {
-      id: "fifteen",
-      label: "15",
-      minWidth: 15, // Adjusted minWidth for Density
-      align: "right",
-      format: (value) => value.toLocaleString("en-US"),
-    },
-    {
-      id: "sixteen",
-      label: "16",
-      minWidth: 15, // Adjusted minWidth for Density
-      align: "right",
-      format: (value) => value.toLocaleString("en-US"),
-    },
-    {
-      id: "seventeen",
-      label: "17",
-      minWidth: 15, // Adjusted minWidth for Density
-      align: "right",
-      format: (value) => value.toLocaleString("en-US"),
-    },
-    {
-      id: "heighteen",
-      label: "18",
-      minWidth: 15, // Adjusted minWidth for Density
-      align: "right",
-      format: (value) => value.toLocaleString("en-US"),
-    },
-    {
-      id: "nineteen",
-      label: "19",
-      minWidth: 15, // Adjusted minWidth for Density
-      align: "right",
-      format: (value) => value.toLocaleString("en-US"),
-    },
-    {
-      id: "twenty",
-      label: "20",
-      minWidth: 15, // Adjusted minWidth for Density
-      align: "right",
-      format: (value) => value.toLocaleString("en-US"),
-    },
-    {
-      id: "twentyone",
-      label: "21",
-      minWidth: 15, // Adjusted minWidth for Density
-      align: "right",
-      format: (value) => value.toLocaleString("en-US"),
-    },
-
-    {
-      id: "twentytwo",
-      label: "22",
-      minWidth: 15, // Adjusted minWidth for Density
-      align: "right",
-      format: (value) => value.toLocaleString("en-US"),
-    },
-
-    {
-      id: "twentythree",
-      label: "23",
-      minWidth: 15, // Adjusted minWidth for Density
-      align: "right",
-      format: (value) => value.toLocaleString("en-US"),
-    },
-    {
-      id: "zero",
-      label: "0",
-      minWidth: 15, // Adjusted minWidth for Density
-      align: "right",
-      format: (value) => value.toLocaleString("en-US"),
-    },
-    {
-      id: "next day",
-      label: "|",
-      minWidth: 15, // Adjusted minWidth for Density
-      align: "right",
-      format: (value) => value.toLocaleString("en-US"),
-    },
-
-    {
-      id: "one",
-      label: "1",
-      minWidth: 15, // Adjusted minWidth for Population
-      align: "right",
-      format: (value) => value.toLocaleString("en-US"),
-    },
-    {
-      id: "two",
-      label: "2",
-      minWidth: 15, // Adjusted minWidth for Population
-      align: "right",
-      format: (value) => value.toLocaleString("en-US"),
-    },
-    {
-      id: "three",
-      label: "3",
-      minWidth: 15, // Adjusted minWidth for Size
-      align: "right",
-      format: (value) => value.toLocaleString("en-US"),
-    },
-    {
-      id: "four",
-      label: "4	",
-      minWidth: 15, // Adjusted minWidth for Density
-      align: "right",
-      format: (value) => value.toLocaleString("en-US"),
-    },
-    {
-      id: "five",
-      label: "5",
-      minWidth: 15, // Adjusted minWidth for Density
-      align: "right",
-      format: (value) => value.toLocaleString("en-US"),
-    },
-    {
-      id: "six",
-      label: "6",
-      minWidth: 15, // Adjusted minWidth for Density
-      align: "right",
-      format: (value) => value.toLocaleString("en-US"),
-    },
-    {
-      id: "seven",
-      label: "7",
-      minWidth: 15, // Adjusted minWidth for Density
-      align: "right",
-      format: (value) => value.toLocaleString("en-US"),
-    },
-    {
-      id: "height",
-      label: "8",
-      minWidth: 15, // Adjusted minWidth for Density
-      align: "right",
-      format: (value) => value.toLocaleString("en-US"),
-    },
-    {
-      id: "nine",
-      label: "9",
-      minWidth: 15, // Adjusted minWidth for Density
-      align: "right",
-      format: (value) => value.toLocaleString("en-US"),
-    },
-    {
-      id: "ten",
-      label: "10",
-      minWidth: 15, // Adjusted minWidth for Density
-      align: "right",
-      format: (value) => value.toLocaleString("en-US"),
-    },
-    {
-      id: "eleven",
-      label: "11",
-      minWidth: 15, // Adjusted minWidth for Density
-      align: "right",
-      format: (value) => value.toLocaleString("en-US"),
-    },
-    {
-      id: "twelve",
-      label: "12",
-      minWidth: 15, // Adjusted minWidth for Density
-      align: "right",
-      format: (value) => value.toLocaleString("en-US"),
-    },
-    {
-      id: "therteen",
-      label: "13",
-      minWidth: 15, // Adjusted minWidth for Density
-      align: "right",
-      format: (value) => value.toLocaleString("en-US"),
-    },
-    {
-      id: "fourteen",
-      label: "14",
-      minWidth: 15, // Adjusted minWidth for Density
-      align: "right",
-      format: (value) => value.toLocaleString("en-US"),
-    },
-    {
-      id: "fifteen",
-      label: "15",
-      minWidth: 15, // Adjusted minWidth for Density
-      align: "right",
-      format: (value) => value.toLocaleString("en-US"),
-    },
-    {
-      id: "sixteen",
-      label: "16",
-      minWidth: 15, // Adjusted minWidth for Density
-      align: "right",
-      format: (value) => value.toLocaleString("en-US"),
-    },
-    {
-      id: "seventeen",
-      label: "17",
-      minWidth: 15, // Adjusted minWidth for Density
-      align: "right",
-      format: (value) => value.toLocaleString("en-US"),
-    },
-    {
-      id: "heighteen",
-      label: "18",
-      minWidth: 15, // Adjusted minWidth for Density
-      align: "right",
-      format: (value) => value.toLocaleString("en-US"),
-    },
-    {
-      id: "nineteen",
-      label: "19",
-      minWidth: 15, // Adjusted minWidth for Density
-      align: "right",
-      format: (value) => value.toLocaleString("en-US"),
-    },
-    {
-      id: "twenty",
-      label: "20",
-      minWidth: 15, // Adjusted minWidth for Density
-      align: "right",
-      format: (value) => value.toLocaleString("en-US"),
-    },
-    {
-      id: "twentyone",
-      label: "21",
-      minWidth: 15, // Adjusted minWidth for Density
-      align: "right",
-      format: (value) => value.toLocaleString("en-US"),
-    },
-
-    {
-      id: "twentytwo",
-      label: "22",
-      minWidth: 15, // Adjusted minWidth for Density
-      align: "right",
-      format: (value) => value.toLocaleString("en-US"),
-    },
-
-    {
-      id: "twentythree",
-      label: "23",
-      minWidth: 15, // Adjusted minWidth for Density
-      align: "right",
-      format: (value) => value.toLocaleString("en-US"),
-    },
-
-    {
-      id: "zero",
-      label: "0",
-      minWidth: 15, // Adjusted minWidth for Density
-      align: "right",
-      format: (value) => value.toLocaleString("en-US"),
-    },
-    {
-      id: "next day",
-      label: "|",
-      minWidth: 15, // Adjusted minWidth for Density
-      align: "right",
-      format: (value) => value.toLocaleString("en-US"),
-    },
-
-    {
-      id: "one",
-      label: "1",
-      minWidth: 15, // Adjusted minWidth for Population
-      align: "right",
-      format: (value) => value.toLocaleString("en-US"),
-    },
-    {
-      id: "two",
-      label: "2",
-      minWidth: 15, // Adjusted minWidth for Population
-      align: "right",
-      format: (value) => value.toLocaleString("en-US"),
-    },
-    {
-      id: "three",
-      label: "3",
-      minWidth: 15, // Adjusted minWidth for Size
-      align: "right",
-      format: (value) => value.toLocaleString("en-US"),
-    },
-    {
-      id: "four",
-      label: "4	",
-      minWidth: 15, // Adjusted minWidth for Density
-      align: "right",
-      format: (value) => value.toLocaleString("en-US"),
-    },
-    {
-      id: "five",
-      label: "5",
-      minWidth: 15, // Adjusted minWidth for Density
-      align: "right",
-      format: (value) => value.toLocaleString("en-US"),
-    },
-    {
-      id: "six",
-      label: "6",
-      minWidth: 15, // Adjusted minWidth for Density
-      align: "right",
-      format: (value) => value.toLocaleString("en-US"),
-    },
-    {
-      id: "seven",
-      label: "7",
-      minWidth: 15, // Adjusted minWidth for Density
-      align: "right",
-      format: (value) => value.toLocaleString("en-US"),
-    },
-    {
-      id: "height",
-      label: "8",
-      minWidth: 15, // Adjusted minWidth for Density
-      align: "right",
-      format: (value) => value.toLocaleString("en-US"),
-    },
-    {
-      id: "nine",
-      label: "9",
-      minWidth: 15, // Adjusted minWidth for Density
-      align: "right",
-      format: (value) => value.toLocaleString("en-US"),
-    },
-    {
-      id: "ten",
-      label: "10",
-      minWidth: 15, // Adjusted minWidth for Density
-      align: "right",
-      format: (value) => value.toLocaleString("en-US"),
-    },
-    {
-      id: "eleven",
-      label: "11",
-      minWidth: 15, // Adjusted minWidth for Density
-      align: "right",
-      format: (value) => value.toLocaleString("en-US"),
-    },
-    {
-      id: "twelve",
-      label: "12",
-      minWidth: 15, // Adjusted minWidth for Density
-      align: "right",
-      format: (value) => value.toLocaleString("en-US"),
-    },
-    {
-      id: "therteen",
-      label: "13",
-      minWidth: 15, // Adjusted minWidth for Density
-      align: "right",
-      format: (value) => value.toLocaleString("en-US"),
-    },
-    {
-      id: "fourteen",
-      label: "14",
-      minWidth: 15, // Adjusted minWidth for Density
-      align: "right",
-      format: (value) => value.toLocaleString("en-US"),
-    },
-    {
-      id: "fifteen",
-      label: "15",
-      minWidth: 15, // Adjusted minWidth for Density
-      align: "right",
-      format: (value) => value.toLocaleString("en-US"),
-    },
-    {
-      id: "sixteen",
-      label: "16",
-      minWidth: 15, // Adjusted minWidth for Density
-      align: "right",
-      format: (value) => value.toLocaleString("en-US"),
-    },
-    {
-      id: "seventeen",
-      label: "17",
-      minWidth: 15, // Adjusted minWidth for Density
-      align: "right",
-      format: (value) => value.toLocaleString("en-US"),
-    },
-    {
-      id: "heighteen",
-      label: "18",
-      minWidth: 15, // Adjusted minWidth for Density
-      align: "right",
-      format: (value) => value.toLocaleString("en-US"),
-    },
-    {
-      id: "nineteen",
-      label: "19",
-      minWidth: 15, // Adjusted minWidth for Density
-      align: "right",
-      format: (value) => value.toLocaleString("en-US"),
-    },
-    {
-      id: "twenty",
-      label: "20",
-      minWidth: 15, // Adjusted minWidth for Density
-      align: "right",
-      format: (value) => value.toLocaleString("en-US"),
-    },
-    {
-      id: "twentyone",
-      label: "21",
-      minWidth: 15, // Adjusted minWidth for Density
-      align: "right",
-      format: (value) => value.toLocaleString("en-US"),
-    },
-
-    {
-      id: "twentytwo",
-      label: "22",
-      minWidth: 15, // Adjusted minWidth for Density
-      align: "right",
-      format: (value) => value.toLocaleString("en-US"),
-    },
-
-    {
-      id: "twentythree",
-      label: "23",
-      minWidth: 15, // Adjusted minWidth for Density
-      align: "right",
-      format: (value) => value.toLocaleString("en-US"),
-    },
-
-    {
-      id: "zero",
-      label: "0",
-      minWidth: 15, // Adjusted minWidth for Density
-      align: "right",
-      format: (value) => value.toLocaleString("en-US"),
-    },
   ];
 
-  const rows = [
-    createData(
-      "",
-      <FontAwesomeIcon icon={faCloud} className="custom-icon" />,
-      <FontAwesomeIcon
-        icon={faSun}
-        className="custom-icon"
-        style={{ color: "yellow" }}
-      />,
-      <FontAwesomeIcon icon={faCloudShowersHeavy} className="custom-icon" />,
-      <FontAwesomeIcon icon={faCloudShowersHeavy} className="custom-icon" />,
-      <FontAwesomeIcon icon={faCloudShowersHeavy} className="custom-icon" />,
-      <FontAwesomeIcon icon={faCloudShowersHeavy} className="custom-icon" />,
-      <FontAwesomeIcon icon={faCloud} className="custom-icon" />,
-      <FontAwesomeIcon
-        icon={faSun}
-        className="custom-icon"
-        style={{ color: "yellow" }}
-      />,
-      <FontAwesomeIcon icon={faCloudShowersHeavy} className="custom-icon" />,
-      <FontAwesomeIcon icon={faCloudShowersHeavy} className="custom-icon" />,
-      <FontAwesomeIcon icon={faCloudShowersHeavy} className="custom-icon" />,
-      <FontAwesomeIcon icon={faCloudShowersHeavy} className="custom-icon" />,
-      <FontAwesomeIcon icon={faCloud} className="custom-icon" />,
-      <FontAwesomeIcon
-        icon={faSun}
-        className="custom-icon"
-        style={{ color: "yellow" }}
-      />,
-      <FontAwesomeIcon icon={faCloudShowersHeavy} className="custom-icon" />,
-      <FontAwesomeIcon icon={faCloudShowersHeavy} className="custom-icon" />,
-      <FontAwesomeIcon icon={faCloudShowersHeavy} className="custom-icon" />,
-      <FontAwesomeIcon icon={faCloudShowersHeavy} className="custom-icon" />,
-      <FontAwesomeIcon icon={faCloud} className="custom-icon" />,
-      <FontAwesomeIcon
-        icon={faSun}
-        className="custom-icon"
-        style={{ color: "yellow" }}
-      />,
-      <FontAwesomeIcon icon={faCloudShowersHeavy} className="custom-icon" />,
-      <FontAwesomeIcon icon={faCloudShowersHeavy} className="custom-icon" />,
-      <FontAwesomeIcon icon={faCloudShowersHeavy} className="custom-icon" />,
-      <FontAwesomeIcon icon={faCloudShowersHeavy} className="custom-icon" />
-    ),
-    createData(
-      <span className="badge badge-success">
-        <FontAwesomeIcon icon={faTemperatureHigh} className="custom-icon" /> T°
-      </span>,
-      "13°",
-      "13°",
-      "13°",
-      "13°",
-      "13°",
-      "13°",
-      "13°",
-      "13°",
-      "13°",
-      "13°",
-      "13°",
-      "13°",
-      "13°",
-      "13°",
-      "13°",
-      "13°",
-      "13°",
-      "13°",
-      "13°",
-      "13°",
-      "13°",
-      "13°",
-      "13°",
-      "13°"
-    ),
-    createData("Rain"),
-    createData(
-      "Wind",
+  const [selectedLocation, setSelectedLocation] = useState("");
+  const [selectedDate, setSelectedDate] = useState("");
+  const [weatherData1, setWeatherData1] = useState(null);
+  const [error, setError] = useState(null);
+  const handleChangeLocation = (event) => {
+    setSelectedLocation(event.target.value);
+  };
+
+  const handleChangeDate = (event) => {
+    setSelectedDate(event.target.value);
+  };
+  const [columns, setColumns] = useState([]);
+  const fetchData = async (
+    selectedLocation,
+    selectedDate,
+    setWeatherData1,
+    setError
+  ) => {
+    try {
+      const response = await axios.post(
+        "http://127.0.0.1:5000/download-weather",
+        {
+          point_name: selectedLocation,
+          date: selectedDate,
+        }
+      );
+
+      setWeatherData1(response.data);
+      setError(null);
+    } catch (error) {
+      setError("Error fetching weather data");
+      console.error(error);
+    }
+  };
+
+  // Utiliser useEffect pour appeler fetchData lors de changements de selectedLocation ou selectedDate
+  useEffect(() => {
+    if (selectedLocation && selectedDate) {
+      fetchData(selectedLocation, selectedDate, setWeatherData1, setError);
+    } else {
+      setError("Please select a location and date");
+    }
+  }, [selectedDate, selectedLocation]);
+
+  const handleSubmit = (event) => {
+    event.preventDefault();
+    if (selectedLocation && selectedDate) {
+      // Vérifiez si les valeurs sont définies
+      fetchData(selectedLocation, selectedDate, setWeatherData1, setError);
+    } else {
+      setError("Please select a location and date");
+    }
+  };
+  const getWindDirectionIcon = (direction) => {
+    if (direction >= 0 && direction < 45) {
+      return <FontAwesomeIcon icon={faArrowUp} />;
+    } else if (direction >= 45 && direction < 135) {
+      return <FontAwesomeIcon icon={faArrowRight} />;
+    } else if (direction >= 135 && direction < 225) {
+      return <FontAwesomeIcon icon={faArrowDown} />;
+    } else if (direction >= 225 && direction < 315) {
+      return <FontAwesomeIcon icon={faArrowLeft} />;
+    } else {
+      return <FontAwesomeIcon icon={faArrowUp} />;
+    }
+  };
+  const getPressureIcon = (pressure) => {
+    if (pressure < 1000) {
+      // Pression basse
+      return (
+        <FontAwesomeIcon icon={faTachometerAlt} style={{ color: "blue" }} />
+      );
+    } else if (pressure >= 1000 && pressure < 1010) {
+      // Pression moyenne
+      return (
+        <FontAwesomeIcon icon={faTachometerAlt} style={{ color: "green" }} />
+      );
+    } else {
+      // Pression élevée
+      return (
+        <FontAwesomeIcon icon={faTachometerAlt} style={{ color: "red" }} />
+      );
+    }
+  };
+  const getVisibilityIcon = (visibility) => {
+    if (visibility >= 10) {
+      return <FontAwesomeIcon icon={faWalking} />;
+    } else if (visibility >= 5 && visibility < 10) {
+      return <FontAwesomeIcon icon={faRunning} />;
+    } else if (visibility >= 2 && visibility < 5) {
+      return <FontAwesomeIcon icon={faBiking} />;
+    } else if (visibility >= 1 && visibility < 2) {
+      return <FontAwesomeIcon icon={faCar} />;
+    } else {
+      return <FontAwesomeIcon icon={faBus} />;
+    }
+  };
+  const getWindGustIcon = (windGust) => {
+    let color;
+    if (windGust < 10) {
+      color = "green";
+    } else if (windGust >= 10 && windGust < 20) {
+      color = "orange";
+    } else {
+      color = "red";
+    }
+
+    return (
       <div
         style={{
-          backgroundColor: "green",
+          backgroundColor: color,
           color: "white",
-          padding: "2px",
+          padding: "5px",
           borderRadius: "5px",
-          marginLeft: "3px",
+
+          justifyContent: "center",
         }}
       >
-        20
-      </div>,
-      <div
-        style={{
-          backgroundColor: "green",
-          color: "white",
-          padding: "2px",
-          borderRadius: "5px",
-          marginLeft: "3px",
-        }}
-      >
-        20
-      </div>,
-      <div
-        style={{
-          backgroundColor: "green",
-          color: "white",
-          padding: "2px",
-          borderRadius: "5px",
-          marginLeft: "3px",
-        }}
-      >
-        20
-      </div>,
-      <div
-        style={{
-          backgroundColor: "green",
-          color: "white",
-          padding: "2px",
-          borderRadius: "5px",
-          marginLeft: "3px",
-        }}
-      >
-        20
-      </div>,
-      <div
-        style={{
-          backgroundColor: "green",
-          color: "white",
-          padding: "2px",
-          borderRadius: "5px",
-          marginLeft: "3px",
-        }}
-      >
-        20
-      </div>,
-      <div
-        style={{
-          backgroundColor: "green",
-          color: "white",
-          padding: "2px",
-          borderRadius: "5px",
-          marginLeft: "3px",
-        }}
-      >
-        20
-      </div>,
-      <div
-        style={{
-          backgroundColor: "red",
-          color: "white",
-          padding: "2px",
-          borderRadius: "5px",
-          marginLeft: "3px",
-        }}
-      >
-        2
-      </div>,
-      <div
-        style={{
-          backgroundColor: "red",
-          color: "white",
-          padding: "2px",
-          borderRadius: "5px",
-        }}
-      >
-        5
-      </div>,
-      <div
-        style={{
-          backgroundColor: "orange",
-          color: "white",
-          padding: "2px",
-          borderRadius: "5px",
-          marginLeft: "3px",
-        }}
-      >
-        2
-      </div>,
-      <div
-        style={{
-          backgroundColor: "lightblue",
-          color: "white",
-          padding: "2px",
-          borderRadius: "5px",
-          marginLeft: "3px",
-        }}
-      >
-        2
-      </div>,
-      <div
-        style={{
-          backgroundColor: "lightblue",
-          color: "white",
-          padding: "2px",
-          borderRadius: "5px",
-          marginLeft: "3px",
-        }}
-      >
-        2
-      </div>,
-      61,
-      31,
-      31,
-      31,
-      31,
-      <div
-        style={{
-          backgroundColor: "green",
-          color: "white",
-          padding: "2px",
-          borderRadius: "5px",
-          marginLeft: "3px",
-        }}
-      >
-        20
-      </div>,
-      <div
-        style={{
-          backgroundColor: "green",
-          color: "white",
-          padding: "2px",
-          borderRadius: "5px",
-          marginLeft: "3px",
-        }}
-      >
-        20
-      </div>,
-      <div
-        style={{
-          backgroundColor: "lightblue",
-          color: "white",
-          padding: "2px",
-          borderRadius: "5px",
-          marginLeft: "3px",
-        }}
-      >
-        20
-      </div>,
-      31,
-      32,
-      2,
-      2,
-      2,
-      2,
-      2,
-      <div
-        style={{
-          backgroundColor: "black",
-          color: "white",
-          padding: "2px",
-          borderRadius: "5px",
-          marginLeft: "3px",
-        }}
-      >
-        20
-      </div>,
-      <div
-        style={{
-          backgroundColor: "green",
-          color: "white",
-          padding: "2px",
-          borderRadius: "5px",
-          marginLeft: "3px",
-        }}
-      >
-        20
-      </div>,
-      2,
-      2,
-      <div
-        style={{
-          backgroundColor: "green",
-          color: "white",
-          padding: "2px",
-          borderRadius: "5px",
-          marginLeft: "3px",
-        }}
-      >
-        20
-      </div>,
-      <div
-        style={{
-          backgroundColor: "green",
-          color: "white",
-          padding: "2px",
-          borderRadius: "5px",
-          marginLeft: "3px",
-        }}
-      >
-        20
-      </div>,
-      <div
-        style={{
-          backgroundColor: "black",
-          color: "white",
-          padding: "2px",
-          borderRadius: "5px",
-          marginLeft: "3px",
-        }}
-      >
-        20
-      </div>,
-      2,
-      2,
-      2,
-      2,
-      2,
-      2,
-      2
-    ),
-    createData(
-      "Wind guts",
-      <div
-        style={{
-          backgroundColor: "orange",
-          color: "white",
-          padding: "2px",
-          borderRadius: "5px",
-          marginLeft: "3px",
-        }}
-      >
-        23
-      </div>,
-      <div
-        style={{
-          backgroundColor: "orange",
-          color: "white",
-          padding: "2px",
-          borderRadius: "5px",
-          marginLeft: "3px",
-        }}
-      >
-        2
-      </div>,
-      <div
-        style={{
-          backgroundColor: "red",
-          color: "white",
-          padding: "2px",
-          borderRadius: "5px",
-          marginLeft: "3px",
-        }}
-      >
-        2
-      </div>,
-      <div
-        style={{
-          backgroundColor: "red",
-          color: "white",
-          padding: "2px",
-          borderRadius: "5px",
-        }}
-      >
-        5
-      </div>,
-      <div
-        style={{
-          backgroundColor: "orange",
-          color: "white",
-          padding: "2px",
-          borderRadius: "5px",
-          marginLeft: "3px",
-        }}
-      >
-        2
-      </div>,
-      <div
-        style={{
-          backgroundColor: "green",
-          color: "white",
-          padding: "2px",
-          borderRadius: "5px",
-          marginLeft: "3px",
-        }}
-      >
-        2
-      </div>,
-      <div
-        style={{
-          backgroundColor: "green",
-          color: "white",
-          padding: "2px",
-          borderRadius: "5px",
-          marginLeft: "3px",
-        }}
-      >
-        2
-      </div>,
-      <div
-        style={{
-          backgroundColor: "green",
-          color: "white",
-          padding: "2px",
-          borderRadius: "5px",
-          marginLeft: "3px",
-        }}
-      >
-        2
-      </div>,
-      <div
-        style={{
-          backgroundColor: "green",
-          color: "white",
-          padding: "2px",
-          borderRadius: "5px",
-          marginLeft: "3px",
-        }}
-      >
-        2
-      </div>,
-      <div
-        style={{
-          backgroundColor: "orange",
-          color: "white",
-          padding: "2px",
-          borderRadius: "5px",
-          marginLeft: "3px",
-        }}
-      >
-        2
-      </div>,
-      <div
-        style={{
-          backgroundColor: "green",
-          color: "white",
-          padding: "2px",
-          borderRadius: "5px",
-          marginLeft: "3px",
-        }}
-      >
-        2
-      </div>,
-      <div
-        style={{
-          backgroundColor: "orange",
-          color: "white",
-          padding: "2px",
-          borderRadius: "5px",
-          marginLeft: "3px",
-        }}
-      >
-        2
-      </div>,
-      <div
-        style={{
-          backgroundColor: "orange",
-          color: "white",
-          padding: "2px",
-          borderRadius: "5px",
-          marginLeft: "3px",
-        }}
-      >
-        2
-      </div>,
-      <div
-        style={{
-          backgroundColor: "green",
-          color: "white",
-          padding: "2px",
-          borderRadius: "5px",
-          marginLeft: "3px",
-        }}
-      >
-        2
-      </div>,
-      <div
-        style={{
-          backgroundColor: "orange",
-          color: "white",
-          padding: "2px",
-          borderRadius: "5px",
-          marginLeft: "3px",
-        }}
-      >
-        2
-      </div>,
-      <div
-        style={{
-          backgroundColor: "orange",
-          color: "white",
-          padding: "2px",
-          borderRadius: "5px",
-          marginLeft: "3px",
-        }}
-      >
-        2
-      </div>,
-      <div
-        style={{
-          backgroundColor: "orange",
-          color: "white",
-          padding: "2px",
-          borderRadius: "5px",
-          marginLeft: "3px",
-        }}
-      >
-        2
-      </div>,
-      <div
-        style={{
-          backgroundColor: "orange",
-          color: "white",
-          padding: "2px",
-          borderRadius: "5px",
-          marginLeft: "3px",
-        }}
-      >
-        2
-      </div>,
-      <div
-        style={{
-          backgroundColor: "green",
-          color: "white",
-          padding: "2px",
-          borderRadius: "5px",
-          marginLeft: "3px",
-        }}
-      >
-        2
-      </div>,
-      <div
-        style={{
-          backgroundColor: "green",
-          color: "white",
-          padding: "2px",
-          borderRadius: "5px",
-          marginLeft: "3px",
-        }}
-      >
-        2
-      </div>,
-      <div
-        style={{
-          backgroundColor: "green",
-          color: "white",
-          padding: "2px",
-          borderRadius: "5px",
-          marginLeft: "3px",
-        }}
-      >
-        2
-      </div>,
-      <div
-        style={{
-          backgroundColor: "green",
-          color: "white",
-          padding: "2px",
-          borderRadius: "5px",
-          marginLeft: "3px",
-        }}
-      >
-        2
-      </div>,
-      <div
-        style={{
-          backgroundColor: "orange",
-          color: "white",
-          padding: "2px",
-          borderRadius: "5px",
-          marginLeft: "3px",
-        }}
-      >
-        2
-      </div>,
-      <div
-        style={{
-          backgroundColor: "green",
-          color: "white",
-          padding: "2px",
-          borderRadius: "5px",
-          marginLeft: "3px",
-        }}
-      >
-        2
-      </div>,
-      <div
-        style={{
-          backgroundColor: "green",
-          color: "white",
-          padding: "2px",
-          borderRadius: "5px",
-          marginLeft: "3px",
-        }}
-      >
-        2
-      </div>,
-      <div
-        style={{
-          backgroundColor: "orange",
-          color: "white",
-          padding: "2px",
-          borderRadius: "5px",
-          marginLeft: "3px",
-        }}
-      >
-        2
+        {windGust}
       </div>
-    ),
-    createData(
-      "Wind dr",
-      <FontAwesomeIcon icon={faArrowLeft} className="custom-icon" />,
-      <FontAwesomeIcon icon={faArrowLeft} className="custom-icon" />,
-      <FontAwesomeIcon icon={faArrowLeft} className="custom-icon" />,
-      <FontAwesomeIcon icon={faArrowLeft} className="custom-icon" />,
-      <FontAwesomeIcon icon={faArrowLeft} className="custom-icon" />,
-      <FontAwesomeIcon icon={faArrowRight} className="custom-icon" />,
-      <FontAwesomeIcon icon={faArrowRight} className="custom-icon" />,
-      <FontAwesomeIcon icon={faArrowLeft} className="custom-icon" />,
-      <FontAwesomeIcon icon={faArrowLeft} className="custom-icon" />,
-      <FontAwesomeIcon icon={faArrowRight} className="custom-icon" />,
-      <FontAwesomeIcon icon={faArrowLeft} className="custom-icon" />,
-      <FontAwesomeIcon icon={faArrowRight} className="custom-icon" />,
-      <FontAwesomeIcon icon={faArrowLeft} className="custom-icon" />,
-      <FontAwesomeIcon icon={faArrowRight} className="custom-icon" />,
-      <FontAwesomeIcon icon={faArrowLeft} className="custom-icon" />,
-      <FontAwesomeIcon icon={faArrowRight} className="custom-icon" />,
-      <FontAwesomeIcon icon={faArrowLeft} className="custom-icon" />,
-      <FontAwesomeIcon icon={faArrowLeft} className="custom-icon" />,
-      <FontAwesomeIcon icon={faArrowLeft} className="custom-icon" />,
-      <FontAwesomeIcon icon={faArrowLeft} className="custom-icon" />,
-      <FontAwesomeIcon icon={faArrowLeft} className="custom-icon" />,
-      <FontAwesomeIcon icon={faArrowLeft} className="custom-icon" />,
-      <FontAwesomeIcon icon={faArrowLeft} className="custom-icon" />,
-      <FontAwesomeIcon icon={faArrowLeft} className="custom-icon" />
-    ),
-    createData(
-      <span className="badge badge-success">windspeed </span>,
-      "13°",
-      "13°",
-      "13°",
-      "13°",
-      "13°",
-      "13°",
-      "13°",
-      "13°",
-      "13°",
-      "13°",
-      "13°",
-      "13°",
-      "13°",
-      "13°",
-      "13°",
-      "13°",
-      "13°",
-      "13°",
-      "13°",
-      "13°",
-      "13°",
-      "13°",
-      "13°",
-      "13°"
-    ),
-    createData(
-      <span className="badge badge-success">pressure</span>,
-      "13°",
-      "13°",
-      "13°",
-      "13°",
-      "13°",
-      "13°",
-      "13°",
-      "13°",
-      "13°",
-      "13°",
-      "13°",
-      "13°",
-      "13°",
-      "13°",
-      "13°",
-      "13°",
-      "13°",
-      "13°",
-      "13°",
-      "13°",
-      "13°",
-      "13°",
-      "13°",
-      "13°"
-    ),
-    createData(
-      <span className="badge badge-success">cloudcover</span>,
-      "13°",
-      "13°",
-      "13°",
-      "13°",
-      "13°",
-      "13°",
-      "13°",
-      "13°",
-      "13°",
-      "13°",
-      "13°",
-      "13°",
-      "13°",
-      "13°",
-      "13°",
-      "13°",
-      "13°",
-      "13°",
-      "13°",
-      "13°",
-      "13°",
-      "13°",
-      "13°",
-      "13°"
-    ),
-    createData(
-      <span className="badge badge-success">visibility</span>,
-      "13°",
-      "13°",
-      "13°",
-      "13°",
-      "13°",
-      "13°",
-      "13°",
-      "13°",
-      "13°",
-      "13°",
-      "13°",
-      "13°",
-      "13°",
-      "13°",
-      "13°",
-      "13°",
-      "13°",
-      "13°",
-      "13°",
-      "13°",
-      "13°",
-      "13°",
-      "13°",
-      "13°"
-    ),
-    createData(
-      <span className="badge badge-success">solarradiation</span>,
-      "13°",
-      "13°",
-      "13°",
-      "13°",
-      "13°",
-      "13°",
-      "13°",
-      "13°",
-      "13°",
-      "13°",
-      "13°",
-      "13°",
-      "13°",
-      "13°",
-      "13°",
-      "13°",
-      "13°",
-      "13°",
-      "13°",
-      "13°",
-      "13°",
-      "13°",
-      "13°",
-      "13°"
-    ),
-    createData(
-      <span className="badge badge-success">solarenergy</span>,
-      "13°",
-      "13°",
-      "13°",
-      "13°",
-      "13°",
-      "13°",
-      "13°",
-      "13°",
-      "13°",
-      "13°",
-      "13°",
-      "13°",
-      "13°",
-      "13°",
-      "13°",
-      "13°",
-      "13°",
-      "13°",
-      "13°",
-      "13°",
-      "13°",
-      "13°",
-      "13°",
-      "13°"
-    ),
-  ];
+    );
+  };
+  const getWindSpeedStyle = (windspeed) => {
+    let color;
 
-  function createData(
-    name,
-    one,
-    two,
-    three,
-    four,
-    five,
-    six,
-    seven,
-    height,
-    nine,
-    ten,
-    eleven,
-    twelve,
-    therteen,
-    fourteen,
-    fifteen,
-    sixteen,
-    seventeen,
-    heighteen,
-    nineteen,
-    twenty,
-    twentyone,
-    twentytwo,
-    twentythree,
-    zero
-  ) {
-    return {
-      name,
-      one,
-      two,
-      three,
-      four,
-      five,
-      six,
-      seven,
-      height,
-      nine,
-      ten,
-      eleven,
-      twelve,
-      therteen,
-      fourteen,
-      fifteen,
-      sixteen,
-      seventeen,
-      heighteen,
-      nineteen,
-      twenty,
-      twentyone,
-      twentytwo,
-      twentythree,
-      zero,
-    };
-  }
+    if (windspeed < 10) {
+      color = "green";
+    } else if (windspeed >= 10 && windspeed < 20) {
+      color = "orange";
+    } else {
+      color = "red";
+    }
+
+    return (
+      <div
+        style={{
+          backgroundColor: color,
+
+          padding: "5px",
+          borderRadius: "5px",
+          justifyContent: "center",
+        }}
+      >
+        {windspeed}
+      </div>
+    );
+  };
+  const getHumidityIcon = (humidity) => {
+    if (humidity < 30) {
+      return <FontAwesomeIcon icon={faTint} style={{ color: "blue" }} />;
+    } else if (humidity >= 30 && humidity < 70) {
+      return <FontAwesomeIcon icon={faTint} style={{ color: "green" }} />;
+    } else {
+      return <FontAwesomeIcon icon={faTint} style={{ color: "red" }} />;
+    }
+  };
+  const getDayOfWeek1 = (dateString) => {
+    const daysOfWeek = [
+      "Sunday",
+      "Monday",
+      "Tuesday",
+      "Wednesday",
+      "Thursday",
+      "Friday",
+      "Saturday",
+    ];
+    const date = new Date(dateString);
+    const dayOfWeekIndex = date.getDay();
+    return daysOfWeek[dayOfWeekIndex];
+  };
 
   return (
     <Paper style={{ width: "100%", overflow: "auto" }}>
       <FormControl fullWidth style={{ marginBottom: "20px" }}>
         <InputLabel id="demo-simple-select-label">Select Country</InputLabel>
-        <div>
-          <select value={selectedOption} onChange={handleChange}>
-            <option value="">Select a location</option>
-            {options.map((option, index) => (
-              <option key={index} value={option}>
-                {option}
-              </option>
-            ))}
-          </select>
-          <div>
-            {weatherData.map((data, index) => (
-              <div key={index}>
-                <p>Date Time: {data.datetime}</p>
-                <p>windgust: {data.windgust}</p>
-                <p>winddir: {data.winddir}</p>
-                <p>winddir50: {data.winddir50}</p>
-                <p>winddir80: {data.winddir80}</p>
-                <p>winddir100: {data.winddir100}</p>
-                <p>windspeed: {data.windspeed}</p>
-                <p>windspeed50: {data.windspeed}</p>
-                <p>windspeed80: {data.windspeed80}</p>
-                <p>windspeed100: {data.windspeed80}</p>
-                <p>pressure: {data.pressure}</p>
-                <p>cloudcover: {data.cloudcover}</p>
-                <p>visibility: {data.visibility}</p>
-                <p>solarradiation: {data.solarradiation}</p>
-                <p>solarradiation: {data.solarradiation}</p>
 
-                {/* Add other data fields as needed */}
-              </div>
-            ))}
-          </div>
+        <div>
+          <form onSubmit={handleSubmit}>
+            <div></div>
+            <input
+              type="date"
+              value={selectedDate}
+              onChange={handleChangeDate}
+              style={{ marginRight: "10px" }}
+            ></input>
+            <select value={selectedLocation} onChange={handleChangeLocation}>
+              <option value="">Select a location</option>
+              {options.map((option, index) => (
+                <option key={index} value={option}>
+                  {option}
+                </option>
+              ))}
+            </select>
+          </form>
+          <div>{/* Vos autres éléments d'interface utilisateur */}</div>
         </div>
       </FormControl>
       <TableContainer style={{ maxHeight: 800 }}>
         <Table stickyHeader aria-label="sticky table">
-          <thead>
+          {/*<thead>
             <TableCell
               colSpan={columns.length / 2}
               align="center"
@@ -1727,88 +333,543 @@ function Data() {
                 marginLeft: "200px",
               }}
             >
-              {`${getDayOfWeek(
-                currentDate
-              )}, ${currentDate.toLocaleDateString()}`}{" "}
-              {/* Display current day and date */}
+              {weatherData1 &&
+              weatherData1.days &&
+              weatherData1.days.length > 0 ? (
+                <div style={{ display: "flex" }}>
+                  {weatherData1.days.map((day) => (
+                    <h5 key={day.datetime}>{day.datetime}</h5>
+                  ))}
+                </div>
+              ) : (
+                `${getDayOfWeek(
+                  currentDate
+                )}, ${currentDate.toLocaleDateString()}`
+              )}
             </TableCell>
-            <TableCell
-              colSpan={columns.length}
-              align="center"
-              style={{ fontWeight: "bold", fontSize: "1.2em" }}
-            >
-              {`${getDayOfWeek(nextDay)}, ${nextDay.toLocaleDateString()}`}{" "}
-              {/* Display next day and date */}
-            </TableCell>
-            <TableCell
-              colSpan={columns.length / 4.5}
-              align="center"
-              style={{
-                fontWeight: "bold",
-                fontSize: "1.2em",
-                marginLeft: "200px",
-              }}
-            >
-              {`${getDayOfWeek(
-                currentDate
-              )}, ${currentDate.toLocaleDateString()}`}{" "}
-              {/* Display current day and date */}
-            </TableCell>
-            <TableCell
-              colSpan={columns.length}
-              align="center"
-              style={{ fontWeight: "bold", fontSize: "1.2em" }}
-            >
-              {`${getDayOfWeek(nextDay)}, ${nextDay.toLocaleDateString()}`}{" "}
-              {/* Display next day and date */}
-            </TableCell>
-          </thead>
+            </thead>*/}
+
           <TableHead>
             <TableRow>
-              {columns.map((column) => (
-                <TableCell
-                  key={column.id}
-                  align={column.align}
-                  style={{
-                    minWidth: column.minWidth,
-                    padding: "5px", // Adjusted horizontal padding
-                  }}
-                >
-                  {column.label}
-                </TableCell>
-              ))}
+              {weatherData1 &&
+                weatherData1.days &&
+                weatherData1.days.length > 0 &&
+                weatherData1.days.map((day, dayIndex) => (
+                  <React.Fragment key={dayIndex}>
+                    <TableCell
+                      align="center"
+                      colSpan={24}
+                      style={{ fontWeight: "bold" }}
+                    >
+                      {" "}
+                      {/* Colspan set to 24 to span all hours */}
+                      {`${getDayOfWeek1(day.datetime)}, ${new Date(
+                        day.datetime
+                      ).toLocaleDateString()}`}
+                    </TableCell>
+                  </React.Fragment>
+                ))}
             </TableRow>
           </TableHead>
+
           <TableBody>
-            {rows
-              .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-              .map((row, rowIndex) => {
-                return (
-                  <TableRow hover role="checkbox" tabIndex={-1} key={rowIndex}>
-                    {columns.map((column) => {
-                      const value = row[column.id];
-                      return (
-                        <TableCell
-                          key={column.id}
-                          align={column.align}
-                          style={{ padding: "2px" }}
-                        >
-                          {column.format && typeof value === "number"
-                            ? column.format(value)
-                            : value}
+            <TableRow>
+              <TableCell>Hour</TableCell>
+              {weatherData1 &&
+                weatherData1.days &&
+                weatherData1.days.length > 0 &&
+                weatherData1.days.map((day, dayIndex) => (
+                  <React.Fragment key={dayIndex}>
+                    {day.hours &&
+                      day.hours.map((hour, hourIndex) => (
+                        <TableCell key={hourIndex} align="right">
+                          {hour.datetime}
                         </TableCell>
-                      );
-                    })}
-                  </TableRow>
-                );
-              })}
+                      ))}
+                  </React.Fragment>
+                ))}
+            </TableRow>
+
+            <TableRow>
+              <TableCell>precip</TableCell>
+              {weatherData1 &&
+                weatherData1.days &&
+                weatherData1.days.length > 0 &&
+                weatherData1.days.map((day, dayIndex) => (
+                  <React.Fragment key={dayIndex}>
+                    {day.hours &&
+                      day.hours.map((hour, hourIndex) => (
+                        <TableCell key={hourIndex} align="right">
+                          {hour.precip > 0 ? (
+                            <FontAwesomeIcon icon={faCloudShowersHeavy} />
+                          ) : hour.cloudcover > 50 ? (
+                            <FontAwesomeIcon
+                              icon={faCloud}
+                              style={{ color: "grey" }}
+                            />
+                          ) : (
+                            <FontAwesomeIcon
+                              icon={faSun}
+                              style={{ color: "yellow" }}
+                            />
+                          )}
+                        </TableCell>
+                      ))}
+                  </React.Fragment>
+                ))}
+            </TableRow>
+            <TableRow>
+              <TableCell>
+                {" "}
+                <FontAwesomeIcon icon={faTemperatureHigh} />T
+              </TableCell>
+              {weatherData1 &&
+                weatherData1.days &&
+                weatherData1.days.length > 0 &&
+                weatherData1.days.map((day, dayIndex) => (
+                  <React.Fragment key={dayIndex}>
+                    {day.hours &&
+                      day.hours.map((hour, hourIndex) => (
+                        <TableCell key={hourIndex} align="right">
+                          {hour.temp}&deg;C
+                        </TableCell>
+                      ))}
+                  </React.Fragment>
+                ))}
+            </TableRow>
+            <TableRow>
+              <TableCell> feelslike</TableCell>
+              {weatherData1 &&
+                weatherData1.days &&
+                weatherData1.days.length > 0 &&
+                weatherData1.days.map((day, dayIndex) => (
+                  <React.Fragment key={dayIndex}>
+                    {day.hours &&
+                      day.hours.map((hour, hourIndex) => (
+                        <TableCell key={hourIndex} align="right">
+                          {hour.feelslike}
+                        </TableCell>
+                      ))}
+                  </React.Fragment>
+                ))}
+            </TableRow>
+            <TableRow>
+              <TableCell> humidity</TableCell>
+              {weatherData1 &&
+                weatherData1.days &&
+                weatherData1.days.length > 0 &&
+                weatherData1.days.map((day, dayIndex) => (
+                  <React.Fragment key={dayIndex}>
+                    {day.hours &&
+                      day.hours.map((hour, hourIndex) => (
+                        <TableCell key={hourIndex} align="right">
+                          {getHumidityIcon(hour.humidity)}
+                        </TableCell>
+                      ))}
+                  </React.Fragment>
+                ))}
+            </TableRow>
+            <TableRow>
+              <TableCell style={{}}>Dew</TableCell>
+              {weatherData1 &&
+                weatherData1.days &&
+                weatherData1.days.length > 0 &&
+                weatherData1.days.map((day, dayIndex) => (
+                  <React.Fragment key={dayIndex}>
+                    {day.hours &&
+                      day.hours.map((hour, hourIndex) => (
+                        <TableCell
+                          key={hourIndex}
+                          align="right"
+                          style={{ color: hour.dew > 20 ? "red" : "green" }}
+                        >
+                          {hour.dew}
+                        </TableCell>
+                      ))}
+                  </React.Fragment>
+                ))}
+            </TableRow>
+
+            <TableRow>
+              <TableCell> snow</TableCell>
+              {weatherData1 &&
+                weatherData1.days &&
+                weatherData1.days.length > 0 &&
+                weatherData1.days.map((day, dayIndex) => (
+                  <React.Fragment key={dayIndex}>
+                    {day.hours &&
+                      day.hours.map((hour, hourIndex) => (
+                        <TableCell key={hourIndex} align="right">
+                          {hour.snow > 0 ? (
+                            <FontAwesomeIcon icon={faSnowflake} />
+                          ) : (
+                            <FontAwesomeIcon icon={faCloud} />
+                          )}
+                        </TableCell>
+                      ))}
+                  </React.Fragment>
+                ))}
+            </TableRow>
+            <TableRow>
+              <TableCell> snowdepth</TableCell>
+              {weatherData1 &&
+                weatherData1.days &&
+                weatherData1.days.length > 0 &&
+                weatherData1.days.map((day, dayIndex) => (
+                  <React.Fragment key={dayIndex}>
+                    {day.hours &&
+                      day.hours.map((hour, hourIndex) => (
+                        <TableCell key={hourIndex} align="right">
+                          {hour.snowdepth}
+                        </TableCell>
+                      ))}
+                  </React.Fragment>
+                ))}
+            </TableRow>
+            <TableRow>
+              <TableCell> windgust</TableCell>
+              {weatherData1 &&
+                weatherData1.days &&
+                weatherData1.days.length > 0 &&
+                weatherData1.days.map((day, dayIndex) => (
+                  <React.Fragment key={dayIndex}>
+                    {day.hours &&
+                      day.hours.map((hour, hourIndex) => (
+                        <TableCell key={hourIndex} align="right">
+                          {getWindGustIcon(hour.windgust)}
+                        </TableCell>
+                      ))}
+                  </React.Fragment>
+                ))}
+            </TableRow>
+            <TableRow>
+              <TableCell> windspeed</TableCell>
+              {weatherData1 &&
+                weatherData1.days &&
+                weatherData1.days.length > 0 &&
+                weatherData1.days.map((day, dayIndex) => (
+                  <React.Fragment key={dayIndex}>
+                    {day.hours &&
+                      day.hours.map((hour, hourIndex) => (
+                        <TableCell key={hourIndex} align="right">
+                          {getWindSpeedStyle(hour.windspeed)}
+                        </TableCell>
+                      ))}
+                  </React.Fragment>
+                ))}
+            </TableRow>
+            <TableRow>
+              <TableCell> winddir</TableCell>
+              {weatherData1 &&
+                weatherData1.days &&
+                weatherData1.days.length > 0 &&
+                weatherData1.days.map((day, dayIndex) => (
+                  <React.Fragment key={dayIndex}>
+                    {day.hours &&
+                      day.hours.map((hour, hourIndex) => (
+                        <TableCell key={hourIndex} align="right">
+                          {getWindDirectionIcon(hour.winddir)}
+                        </TableCell>
+                      ))}
+                  </React.Fragment>
+                ))}
+            </TableRow>
+            <TableRow>
+              <TableCell> pressure</TableCell>
+              {weatherData1 &&
+                weatherData1.days &&
+                weatherData1.days.length > 0 &&
+                weatherData1.days.map((day, dayIndex) => (
+                  <React.Fragment key={dayIndex}>
+                    {day.hours &&
+                      day.hours.map((hour, hourIndex) => (
+                        <TableCell key={hourIndex} align="right">
+                          {getPressureIcon(hour.pressure)}
+                        </TableCell>
+                      ))}
+                  </React.Fragment>
+                ))}
+            </TableRow>
+            <TableRow>
+              <TableCell> visibility</TableCell>
+              {weatherData1 &&
+                weatherData1.days &&
+                weatherData1.days.length > 0 &&
+                weatherData1.days.map((day, dayIndex) => (
+                  <React.Fragment key={dayIndex}>
+                    {day.hours &&
+                      day.hours.map((hour, hourIndex) => (
+                        <TableCell key={hourIndex} align="right">
+                          {getVisibilityIcon(hour.visibility)}
+                        </TableCell>
+                      ))}
+                  </React.Fragment>
+                ))}
+            </TableRow>
+            <TableRow>
+              <TableCell> cloudcover</TableCell>
+              {weatherData1 &&
+                weatherData1.days &&
+                weatherData1.days.length > 0 &&
+                weatherData1.days.map((day, dayIndex) => (
+                  <React.Fragment key={dayIndex}>
+                    {day.hours &&
+                      day.hours.map((hour, hourIndex) => (
+                        <TableCell key={hourIndex} align="right">
+                          {hour.cloudcover}
+                        </TableCell>
+                      ))}
+                  </React.Fragment>
+                ))}
+            </TableRow>
+            <TableRow>
+              <TableCell> solarradiation</TableCell>
+              {weatherData1 &&
+                weatherData1.days &&
+                weatherData1.days.length > 0 &&
+                weatherData1.days.map((day, dayIndex) => (
+                  <React.Fragment key={dayIndex}>
+                    {day.hours &&
+                      day.hours.map((hour, hourIndex) => (
+                        <TableCell key={hourIndex} align="right">
+                          {hour.solarradiation}
+                        </TableCell>
+                      ))}
+                  </React.Fragment>
+                ))}
+            </TableRow>
+            <TableRow>
+              <TableCell> solarenergy</TableCell>
+              {weatherData1 &&
+                weatherData1.days &&
+                weatherData1.days.length > 0 &&
+                weatherData1.days.map((day, dayIndex) => (
+                  <React.Fragment key={dayIndex}>
+                    {day.hours &&
+                      day.hours.map((hour, hourIndex) => (
+                        <TableCell key={hourIndex} align="right">
+                          {hour.solarenergy}
+                        </TableCell>
+                      ))}
+                  </React.Fragment>
+                ))}
+            </TableRow>
+            <TableRow>
+              <TableCell> uvindex</TableCell>
+              {weatherData1 &&
+                weatherData1.days &&
+                weatherData1.days.length > 0 &&
+                weatherData1.days.map((day, dayIndex) => (
+                  <React.Fragment key={dayIndex}>
+                    {day.hours &&
+                      day.hours.map((hour, hourIndex) => (
+                        <TableCell key={hourIndex} align="right">
+                          {hour.uvindex}
+                        </TableCell>
+                      ))}
+                  </React.Fragment>
+                ))}
+            </TableRow>
+            <TableRow>
+              <TableCell> severerisk</TableCell>
+              {weatherData1 &&
+                weatherData1.days &&
+                weatherData1.days.length > 0 &&
+                weatherData1.days.map((day, dayIndex) => (
+                  <React.Fragment key={dayIndex}>
+                    {day.hours &&
+                      day.hours.map((hour, hourIndex) => (
+                        <TableCell key={hourIndex} align="right">
+                          {hour.severerisk}
+                        </TableCell>
+                      ))}
+                  </React.Fragment>
+                ))}
+            </TableRow>
+            <TableRow>
+              <TableCell> windspeed50</TableCell>
+              {weatherData1 &&
+                weatherData1.days &&
+                weatherData1.days.length > 0 &&
+                weatherData1.days.map((day, dayIndex) => (
+                  <React.Fragment key={dayIndex}>
+                    {day.hours &&
+                      day.hours.map((hour, hourIndex) => (
+                        <TableCell key={hourIndex} align="right">
+                          {hour.windspeed50}
+                        </TableCell>
+                      ))}
+                  </React.Fragment>
+                ))}
+            </TableRow>
+            <TableRow>
+              <TableCell> winddir50</TableCell>
+              {weatherData1 &&
+                weatherData1.days &&
+                weatherData1.days.length > 0 &&
+                weatherData1.days.map((day, dayIndex) => (
+                  <React.Fragment key={dayIndex}>
+                    {day.hours &&
+                      day.hours.map((hour, hourIndex) => (
+                        <TableCell key={hourIndex} align="right">
+                          {hour.winddir50}
+                        </TableCell>
+                      ))}
+                  </React.Fragment>
+                ))}
+            </TableRow>
+            <TableRow>
+              <TableCell> windspeed80</TableCell>
+              {weatherData1 &&
+                weatherData1.days &&
+                weatherData1.days.length > 0 &&
+                weatherData1.days.map((day, dayIndex) => (
+                  <React.Fragment key={dayIndex}>
+                    {day.hours &&
+                      day.hours.map((hour, hourIndex) => (
+                        <TableCell key={hourIndex} align="right">
+                          {hour.windspeed80}
+                        </TableCell>
+                      ))}
+                  </React.Fragment>
+                ))}
+            </TableRow>
+            <TableRow>
+              <TableCell> winddir80</TableCell>
+              {weatherData1 &&
+                weatherData1.days &&
+                weatherData1.days.length > 0 &&
+                weatherData1.days.map((day, dayIndex) => (
+                  <React.Fragment key={dayIndex}>
+                    {day.hours &&
+                      day.hours.map((hour, hourIndex) => (
+                        <TableCell key={hourIndex} align="right">
+                          {hour.winddir80}
+                        </TableCell>
+                      ))}
+                  </React.Fragment>
+                ))}
+            </TableRow>
+            <TableRow>
+              <TableCell> windspeed100</TableCell>
+              {weatherData1 &&
+                weatherData1.days &&
+                weatherData1.days.length > 0 &&
+                weatherData1.days.map((day, dayIndex) => (
+                  <React.Fragment key={dayIndex}>
+                    {day.hours &&
+                      day.hours.map((hour, hourIndex) => (
+                        <TableCell key={hourIndex} align="right">
+                          {hour.windspeed100}
+                        </TableCell>
+                      ))}
+                  </React.Fragment>
+                ))}
+            </TableRow>
+            <TableRow>
+              <TableCell> winddir100</TableCell>
+              {weatherData1 &&
+                weatherData1.days &&
+                weatherData1.days.length > 0 &&
+                weatherData1.days.map((day, dayIndex) => (
+                  <React.Fragment key={dayIndex}>
+                    {day.hours &&
+                      day.hours.map((hour, hourIndex) => (
+                        <TableCell key={hourIndex} align="right">
+                          {hour.winddir100}
+                        </TableCell>
+                      ))}
+                  </React.Fragment>
+                ))}
+            </TableRow>
+            <TableRow>
+              <TableCell> ghiradiation</TableCell>
+              {weatherData1 &&
+                weatherData1.days &&
+                weatherData1.days.length > 0 &&
+                weatherData1.days.map((day, dayIndex) => (
+                  <React.Fragment key={dayIndex}>
+                    {day.hours &&
+                      day.hours.map((hour, hourIndex) => (
+                        <TableCell key={hourIndex} align="right">
+                          {hour.ghiradiation}
+                        </TableCell>
+                      ))}
+                  </React.Fragment>
+                ))}
+            </TableRow>
+            <TableRow>
+              <TableCell> dniradiation</TableCell>
+              {weatherData1 &&
+                weatherData1.days &&
+                weatherData1.days.length > 0 &&
+                weatherData1.days.map((day, dayIndex) => (
+                  <React.Fragment key={dayIndex}>
+                    {day.hours &&
+                      day.hours.map((hour, hourIndex) => (
+                        <TableCell key={hourIndex} align="right">
+                          {hour.dniradiation}
+                        </TableCell>
+                      ))}
+                  </React.Fragment>
+                ))}
+            </TableRow>
+            <TableRow>
+              <TableCell> difradiation</TableCell>
+              {weatherData1 &&
+                weatherData1.days &&
+                weatherData1.days.length > 0 &&
+                weatherData1.days.map((day, dayIndex) => (
+                  <React.Fragment key={dayIndex}>
+                    {day.hours &&
+                      day.hours.map((hour, hourIndex) => (
+                        <TableCell key={hourIndex} align="right">
+                          {hour.difradiation}
+                        </TableCell>
+                      ))}
+                  </React.Fragment>
+                ))}
+            </TableRow>
+            <TableRow>
+              <TableCell> gtiradiation</TableCell>
+              {weatherData1 &&
+                weatherData1.days &&
+                weatherData1.days.length > 0 &&
+                weatherData1.days.map((day, dayIndex) => (
+                  <React.Fragment key={dayIndex}>
+                    {day.hours &&
+                      day.hours.map((hour, hourIndex) => (
+                        <TableCell key={hourIndex} align="right">
+                          {hour.gtiradiation}
+                        </TableCell>
+                      ))}
+                  </React.Fragment>
+                ))}
+            </TableRow>
+            <TableRow>
+              <TableCell> sunelevation</TableCell>
+              {weatherData1 &&
+                weatherData1.days &&
+                weatherData1.days.length > 0 &&
+                weatherData1.days.map((day, dayIndex) => (
+                  <React.Fragment key={dayIndex}>
+                    {day.hours &&
+                      day.hours.map((hour, hourIndex) => (
+                        <TableCell key={hourIndex} align="right">
+                          {hour.sunelevation}
+                        </TableCell>
+                      ))}
+                  </React.Fragment>
+                ))}
+            </TableRow>
           </TableBody>
         </Table>
       </TableContainer>
+
       <TablePagination
         rowsPerPageOptions={[16, 25, 100]}
         component="div"
-        count={rows.length}
+        //count={rows.length}
         rowsPerPage={rowsPerPage}
         page={page}
         onPageChange={handleChangePage}

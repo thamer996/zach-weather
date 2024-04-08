@@ -9,6 +9,7 @@ import TablePagination from "@mui/material/TablePagination";
 import TableRow from "@mui/material/TableRow";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { FormControl, InputLabel, Select, MenuItem } from "@mui/material";
+
 import axios from "axios";
 import { useEffect } from "react";
 import {
@@ -124,8 +125,11 @@ function Data() {
     },
   ];
 
-  const [selectedLocation, setSelectedLocation] = useState("");
-  const [selectedDate, setSelectedDate] = useState("");
+  const [selectedLocation, setSelectedLocation] = useState("W McCamey");
+  const [selectedDate, setSelectedDate] = useState(
+    new Date().toISOString().substr(0, 10)
+  ); // Obtient la date du jour au format ISO (AAAA-MM-JJ)
+
   const [weatherData1, setWeatherData1] = useState(null);
   const [error, setError] = useState(null);
   const handleChangeLocation = (event) => {
@@ -222,55 +226,87 @@ function Data() {
     }
   };
   const getWindGustIcon = (windGust) => {
-    let color;
+    let gradientColor;
+
     if (windGust < 10) {
-      color = "green";
+      gradientColor = "linear-gradient(to right, #00b09b, #96c93d)";
     } else if (windGust >= 10 && windGust < 20) {
-      color = "orange";
+      gradientColor = "linear-gradient(to right, #f7b733, #fc4a1a)";
     } else {
-      color = "red";
+      gradientColor = "linear-gradient(to right, #eb3349, #f45c43)";
     }
 
     return (
       <div
         style={{
-          backgroundColor: color,
+          background: gradientColor,
           color: "white",
           padding: "5px",
           borderRadius: "5px",
-
-          justifyContent: "center",
+          textAlign: "center",
+          boxShadow: "0px 2px 4px rgba(0, 0, 0, 0.1)",
+          display: "inline-block",
+          margin: "0 -2px", // Pour compenser les marges ajoutées par les cellules adjacentes
         }}
       >
         {windGust}
       </div>
     );
   };
-  const getWindSpeedStyle = (windspeed) => {
-    let color;
+  const getWindgustBackgroundColor = (windgust) => {
+    let gradient;
+
+    if (windgust >= 50) {
+      gradient = "linear-gradient(to right, #eb3349, #f45c43)"; // Rouge orangé pour les rafales de vent élevées
+    } else if (windgust >= 30 && windgust < 50) {
+      gradient = "linear-gradient(to right, #f7b733, #fc4a1a)"; // Jaune orangé pour les rafales de vent modérées
+    } else {
+      gradient = "linear-gradient(to right, #00b09b, #96c93d)"; // Vert pour les rafales de vent faibles
+    }
+
+    return {
+      background: gradient,
+      padding: "5px",
+      borderRadius: "5px",
+      textAlign: "center",
+      color: "#fff", // Pour assurer une bonne visibilité du texte
+    };
+  };
+
+  const getWindSpeedStyle = (windspeed, isFirst, isLast) => {
+    let gradientColor;
 
     if (windspeed < 10) {
-      color = "green";
+      gradientColor = "linear-gradient(to right, #1e9600, #00b200, #3cdc00)";
     } else if (windspeed >= 10 && windspeed < 20) {
-      color = "orange";
+      gradientColor = "linear-gradient(to right, #ff7b00, #ffaa00, #ffc800)";
     } else {
-      color = "red";
+      gradientColor = "linear-gradient(to right, #e60000, #ff2a00, #ff4d4d)";
     }
+
+    // Calculate the correct margins to create a continuous effect
+    const marginRight = isLast ? "0px" : "-1px";
+    const marginLeft = isFirst ? "0px" : "-1px";
 
     return (
       <div
         style={{
-          backgroundColor: color,
-
+          background: gradientColor,
+          color: "white",
           padding: "5px",
           borderRadius: "5px",
-          justifyContent: "center",
+          textAlign: "center",
+          boxShadow: "0px 2px 4px rgba(0, 0, 0, 0.1)",
+          display: "inline-block",
+          marginRight: marginRight, // Adjusted for the last cell
+          marginLeft: marginLeft, // Adjusted for the first cell
         }}
       >
         {windspeed}
       </div>
     );
   };
+
   const getHumidityIcon = (humidity) => {
     if (humidity < 30) {
       return <FontAwesomeIcon icon={faTint} style={{ color: "blue" }} />;
@@ -294,9 +330,113 @@ function Data() {
     const dayOfWeekIndex = date.getDay();
     return daysOfWeek[dayOfWeekIndex];
   };
+  const getStyle = (windspeed) => {
+    let color;
+
+    if (windspeed < 10) {
+      color = "green";
+    } else if (windspeed >= 10 && windspeed < 20) {
+      color = "orange";
+    } else {
+      color = "red";
+    }
+
+    return (
+      <div
+        style={{
+          backgroundColor: color,
+          padding: "5px",
+          borderRadius: "5px",
+          textAlign: "center", // Pour centrer le texte horizontalement
+        }}
+      >
+        {windspeed}
+      </div>
+    );
+  };
+  const getWindDirectionIcon1 = (winddir80) => {
+    if (winddir80 >= 337.5 || winddir80 < 22.5) {
+      return <FontAwesomeIcon icon={faArrowUp} />;
+    } else if (winddir80 >= 22.5 && winddir80 < 67.5) {
+      return (
+        <FontAwesomeIcon
+          icon={faArrowUp}
+          style={{ transform: "rotate(-45deg)" }}
+        />
+      );
+    } else if (winddir80 >= 67.5 && winddir80 < 112.5) {
+      return <FontAwesomeIcon icon={faArrowRight} />;
+    } else if (winddir80 >= 112.5 && winddir80 < 157.5) {
+      return (
+        <FontAwesomeIcon
+          icon={faArrowDown}
+          style={{ transform: "rotate(-45deg)" }}
+        />
+      );
+    } else if (winddir80 >= 157.5 && winddir80 < 202.5) {
+      return <FontAwesomeIcon icon={faArrowDown} />;
+    } else if (winddir80 >= 202.5 && winddir80 < 247.5) {
+      return (
+        <FontAwesomeIcon
+          icon={faArrowDown}
+          style={{ transform: "rotate(45deg)" }}
+        />
+      );
+    } else if (winddir80 >= 247.5 && winddir80 < 292.5) {
+      return <FontAwesomeIcon icon={faArrowLeft} />;
+    } else {
+      return (
+        <FontAwesomeIcon
+          icon={faArrowUp}
+          style={{ transform: "rotate(45deg)" }}
+        />
+      );
+    }
+  };
+  const getCellBackgroundGradient = (feelslike) => {
+    let gradient;
+
+    if (feelslike >= 30) {
+      gradient = "linear-gradient(to right, #ff6666, #ffcccc)"; // Rouge clair pour les températures élevées
+    } else if (feelslike >= 20 && feelslike < 30) {
+      gradient = "linear-gradient(to right, #ffff99, #ffffcc)"; // Jaune clair pour les températures moyennes
+    } else {
+      gradient = "linear-gradient(to right, #99ff99, #ccffcc)"; // Vert clair pour les températures basses
+    }
+
+    return {
+      background: gradient,
+      padding: "5px",
+      borderRadius: "5px",
+      textAlign: "center",
+      color: "#000", // Pour assurer une bonne visibilité du texte
+    };
+  };
+
+  const getWindspeed50BackgroundColor = (windspeed50) => {
+    let colorStart, colorEnd;
+
+    if (windspeed50 >= 50) {
+      colorStart = "#ff0000"; // Rouge pour les vents forts
+      colorEnd = "#ffcccc"; // Rouge clair pour les vents forts
+    } else if (windspeed50 >= 30 && windspeed50 < 50) {
+      colorStart = "#ffcc00"; // Orange pour les vents modérés
+      colorEnd = "#ffffcc"; // Jaune clair pour les vents modérés
+    } else {
+      colorStart = "#00cc00"; // Vert pour les vents faibles
+      colorEnd = "#ccffcc"; // Vert clair pour les vents faibles
+    }
+
+    return {
+      background: `linear-gradient(to right, ${colorStart}, ${colorEnd})`,
+      padding: "5px",
+      borderRadius: "5px",
+      textAlign: "center",
+    };
+  };
 
   return (
-    <Paper style={{ width: "100%", overflow: "auto" }}>
+    <Paper style={{ width: "100%" }}>
       <FormControl fullWidth style={{ marginBottom: "20px" }}>
         <InputLabel id="demo-simple-select-label">Select Country</InputLabel>
 
@@ -321,7 +461,7 @@ function Data() {
           <div>{/* Vos autres éléments d'interface utilisateur */}</div>
         </div>
       </FormControl>
-      <TableContainer style={{ maxHeight: 800 }}>
+      <TableContainer style={{ maxHeight: 2500, overflowX: "auto" }}>
         <Table stickyHeader aria-label="sticky table">
           {/*<thead>
             <TableCell
@@ -357,9 +497,9 @@ function Data() {
                 weatherData1.days.map((day, dayIndex) => (
                   <React.Fragment key={dayIndex}>
                     <TableCell
-                      align="center"
+                      align="left"
                       colSpan={24}
-                      style={{ fontWeight: "bold" }}
+                      style={{ fontWeight: "bold", marginLeft: "120px" }}
                     >
                       {" "}
                       {/* Colspan set to 24 to span all hours */}
@@ -373,8 +513,24 @@ function Data() {
           </TableHead>
 
           <TableBody>
-            <TableRow>
-              <TableCell>Hour</TableCell>
+            <TableRow
+              style={{
+                position: "sticky",
+                top: 0,
+                zIndex: 9999,
+                backgroundColor: "#fff",
+              }}
+            >
+              <TableCell
+                style={{
+                  position: "sticky",
+                  left: 0,
+                  zIndex: 9999,
+                  backgroundColor: "#fff",
+                }}
+              >
+                Hour
+              </TableCell>
               {weatherData1 &&
                 weatherData1.days &&
                 weatherData1.days.length > 0 &&
@@ -383,7 +539,8 @@ function Data() {
                     {day.hours &&
                       day.hours.map((hour, hourIndex) => (
                         <TableCell key={hourIndex} align="right">
-                          {hour.datetime}
+                          {hour.datetime.split(":")[0]}{" "}
+                          {/* Affiche uniquement l'heure */}
                         </TableCell>
                       ))}
                   </React.Fragment>
@@ -391,7 +548,16 @@ function Data() {
             </TableRow>
 
             <TableRow>
-              <TableCell>precip</TableCell>
+              <TableCell
+                style={{
+                  position: "sticky",
+                  left: 0,
+                  zIndex: 9999,
+                  backgroundColor: "#fff",
+                }}
+              >
+                precip
+              </TableCell>
               {weatherData1 &&
                 weatherData1.days &&
                 weatherData1.days.length > 0 &&
@@ -419,7 +585,14 @@ function Data() {
                 ))}
             </TableRow>
             <TableRow>
-              <TableCell>
+              <TableCell
+                style={{
+                  position: "sticky",
+                  left: 0,
+                  zIndex: 9999,
+                  backgroundColor: "#fff",
+                }}
+              >
                 {" "}
                 <FontAwesomeIcon icon={faTemperatureHigh} />T
               </TableCell>
@@ -438,7 +611,17 @@ function Data() {
                 ))}
             </TableRow>
             <TableRow>
-              <TableCell> feelslike</TableCell>
+              <TableCell
+                style={{
+                  position: "sticky",
+                  left: 0,
+                  zIndex: 9999,
+                  backgroundColor: "#fff",
+                }}
+              >
+                {" "}
+                feelslike
+              </TableCell>
               {weatherData1 &&
                 weatherData1.days &&
                 weatherData1.days.length > 0 &&
@@ -446,7 +629,11 @@ function Data() {
                   <React.Fragment key={dayIndex}>
                     {day.hours &&
                       day.hours.map((hour, hourIndex) => (
-                        <TableCell key={hourIndex} align="right">
+                        <TableCell
+                          key={hourIndex}
+                          align="right"
+                          style={getCellBackgroundGradient(hour.feelslike)}
+                        >
                           {hour.feelslike}
                         </TableCell>
                       ))}
@@ -454,7 +641,17 @@ function Data() {
                 ))}
             </TableRow>
             <TableRow>
-              <TableCell> humidity</TableCell>
+              <TableCell
+                style={{
+                  position: "sticky",
+                  left: 0,
+                  zIndex: 9999,
+                  backgroundColor: "#fff",
+                }}
+              >
+                {" "}
+                humidity
+              </TableCell>
               {weatherData1 &&
                 weatherData1.days &&
                 weatherData1.days.length > 0 &&
@@ -470,7 +667,16 @@ function Data() {
                 ))}
             </TableRow>
             <TableRow>
-              <TableCell style={{}}>Dew</TableCell>
+              <TableCell
+                style={{
+                  position: "sticky",
+                  left: 0,
+                  zIndex: 9999,
+                  backgroundColor: "#fff",
+                }}
+              >
+                Dew
+              </TableCell>
               {weatherData1 &&
                 weatherData1.days &&
                 weatherData1.days.length > 0 &&
@@ -491,7 +697,17 @@ function Data() {
             </TableRow>
 
             <TableRow>
-              <TableCell> snow</TableCell>
+              <TableCell
+                style={{
+                  position: "sticky",
+                  left: 0,
+                  zIndex: 9999,
+                  backgroundColor: "#fff",
+                }}
+              >
+                {" "}
+                snow
+              </TableCell>
               {weatherData1 &&
                 weatherData1.days &&
                 weatherData1.days.length > 0 &&
@@ -511,7 +727,17 @@ function Data() {
                 ))}
             </TableRow>
             <TableRow>
-              <TableCell> snowdepth</TableCell>
+              <TableCell
+                style={{
+                  position: "sticky",
+                  left: 0,
+                  zIndex: 9999,
+                  backgroundColor: "#fff",
+                }}
+              >
+                {" "}
+                snowdepth
+              </TableCell>
               {weatherData1 &&
                 weatherData1.days &&
                 weatherData1.days.length > 0 &&
@@ -527,7 +753,17 @@ function Data() {
                 ))}
             </TableRow>
             <TableRow>
-              <TableCell> windgust</TableCell>
+              <TableCell
+                style={{
+                  position: "sticky",
+                  left: 0,
+                  zIndex: 9999,
+                  backgroundColor: "#fff",
+                }}
+              >
+                {" "}
+                windgust
+              </TableCell>
               {weatherData1 &&
                 weatherData1.days &&
                 weatherData1.days.length > 0 &&
@@ -535,15 +771,29 @@ function Data() {
                   <React.Fragment key={dayIndex}>
                     {day.hours &&
                       day.hours.map((hour, hourIndex) => (
-                        <TableCell key={hourIndex} align="right">
-                          {getWindGustIcon(hour.windgust)}
+                        <TableCell
+                          key={hourIndex}
+                          align="right"
+                          style={getWindgustBackgroundColor(hour.windgust)}
+                        >
+                          {hour.windgust}
                         </TableCell>
                       ))}
                   </React.Fragment>
                 ))}
             </TableRow>
             <TableRow>
-              <TableCell> windspeed</TableCell>
+              <TableCell
+                style={{
+                  position: "sticky",
+                  left: 0,
+                  zIndex: 9999,
+                  backgroundColor: "#fff",
+                }}
+              >
+                {" "}
+                windspeed
+              </TableCell>
               {weatherData1 &&
                 weatherData1.days &&
                 weatherData1.days.length > 0 &&
@@ -551,15 +801,29 @@ function Data() {
                   <React.Fragment key={dayIndex}>
                     {day.hours &&
                       day.hours.map((hour, hourIndex) => (
-                        <TableCell key={hourIndex} align="right">
-                          {getWindSpeedStyle(hour.windspeed)}
+                        <TableCell
+                          key={hourIndex}
+                          align="right"
+                          style={getWindspeed50BackgroundColor(hour.windspeed)}
+                        >
+                          {hour.windspeed}
                         </TableCell>
                       ))}
                   </React.Fragment>
                 ))}
             </TableRow>
             <TableRow>
-              <TableCell> winddir</TableCell>
+              <TableCell
+                style={{
+                  position: "sticky",
+                  left: 0,
+                  zIndex: 9999,
+                  backgroundColor: "#fff",
+                }}
+              >
+                {" "}
+                winddir
+              </TableCell>
               {weatherData1 &&
                 weatherData1.days &&
                 weatherData1.days.length > 0 &&
@@ -575,7 +839,17 @@ function Data() {
                 ))}
             </TableRow>
             <TableRow>
-              <TableCell> pressure</TableCell>
+              <TableCell
+                style={{
+                  position: "sticky",
+                  left: 0,
+                  zIndex: 9999,
+                  backgroundColor: "#fff",
+                }}
+              >
+                {" "}
+                pressure
+              </TableCell>
               {weatherData1 &&
                 weatherData1.days &&
                 weatherData1.days.length > 0 &&
@@ -591,7 +865,17 @@ function Data() {
                 ))}
             </TableRow>
             <TableRow>
-              <TableCell> visibility</TableCell>
+              <TableCell
+                style={{
+                  position: "sticky",
+                  left: 0,
+                  zIndex: 9999,
+                  backgroundColor: "#fff",
+                }}
+              >
+                {" "}
+                visibility
+              </TableCell>
               {weatherData1 &&
                 weatherData1.days &&
                 weatherData1.days.length > 0 &&
@@ -607,7 +891,17 @@ function Data() {
                 ))}
             </TableRow>
             <TableRow>
-              <TableCell> cloudcover</TableCell>
+              <TableCell
+                style={{
+                  position: "sticky",
+                  left: 0,
+                  zIndex: 9999,
+                  backgroundColor: "#fff",
+                }}
+              >
+                {" "}
+                cloudcover
+              </TableCell>
               {weatherData1 &&
                 weatherData1.days &&
                 weatherData1.days.length > 0 &&
@@ -623,7 +917,17 @@ function Data() {
                 ))}
             </TableRow>
             <TableRow>
-              <TableCell> solarradiation</TableCell>
+              <TableCell
+                style={{
+                  position: "sticky",
+                  left: 0,
+                  zIndex: 9999,
+                  backgroundColor: "#fff",
+                }}
+              >
+                {" "}
+                solarradiation
+              </TableCell>
               {weatherData1 &&
                 weatherData1.days &&
                 weatherData1.days.length > 0 &&
@@ -639,7 +943,17 @@ function Data() {
                 ))}
             </TableRow>
             <TableRow>
-              <TableCell> solarenergy</TableCell>
+              <TableCell
+                style={{
+                  position: "sticky",
+                  left: 0,
+                  zIndex: 9999,
+                  backgroundColor: "#fff",
+                }}
+              >
+                {" "}
+                solarenergy
+              </TableCell>
               {weatherData1 &&
                 weatherData1.days &&
                 weatherData1.days.length > 0 &&
@@ -655,7 +969,17 @@ function Data() {
                 ))}
             </TableRow>
             <TableRow>
-              <TableCell> uvindex</TableCell>
+              <TableCell
+                style={{
+                  position: "sticky",
+                  left: 0,
+                  zIndex: 9999,
+                  backgroundColor: "#fff",
+                }}
+              >
+                {" "}
+                uvindex
+              </TableCell>
               {weatherData1 &&
                 weatherData1.days &&
                 weatherData1.days.length > 0 &&
@@ -671,7 +995,17 @@ function Data() {
                 ))}
             </TableRow>
             <TableRow>
-              <TableCell> severerisk</TableCell>
+              <TableCell
+                style={{
+                  position: "sticky",
+                  left: 0,
+                  zIndex: 9999,
+                  backgroundColor: "#fff",
+                }}
+              >
+                {" "}
+                severerisk
+              </TableCell>
               {weatherData1 &&
                 weatherData1.days &&
                 weatherData1.days.length > 0 &&
@@ -687,7 +1021,17 @@ function Data() {
                 ))}
             </TableRow>
             <TableRow>
-              <TableCell> windspeed50</TableCell>
+              <TableCell
+                style={{
+                  position: "sticky",
+                  left: 0,
+                  zIndex: 9999,
+                  backgroundColor: "#fff",
+                }}
+              >
+                {" "}
+                windspeed50
+              </TableCell>
               {weatherData1 &&
                 weatherData1.days &&
                 weatherData1.days.length > 0 &&
@@ -695,7 +1039,13 @@ function Data() {
                   <React.Fragment key={dayIndex}>
                     {day.hours &&
                       day.hours.map((hour, hourIndex) => (
-                        <TableCell key={hourIndex} align="right">
+                        <TableCell
+                          key={hourIndex}
+                          align="right"
+                          style={getWindspeed50BackgroundColor(
+                            hour.windspeed50
+                          )}
+                        >
                           {hour.windspeed50}
                         </TableCell>
                       ))}
@@ -703,7 +1053,17 @@ function Data() {
                 ))}
             </TableRow>
             <TableRow>
-              <TableCell> winddir50</TableCell>
+              <TableCell
+                style={{
+                  position: "sticky",
+                  left: 0,
+                  zIndex: 9999,
+                  backgroundColor: "#fff",
+                }}
+              >
+                {" "}
+                winddir50
+              </TableCell>
               {weatherData1 &&
                 weatherData1.days &&
                 weatherData1.days.length > 0 &&
@@ -712,14 +1072,24 @@ function Data() {
                     {day.hours &&
                       day.hours.map((hour, hourIndex) => (
                         <TableCell key={hourIndex} align="right">
-                          {hour.winddir50}
+                          {getWindDirectionIcon1(hour.winddir50)}
                         </TableCell>
                       ))}
                   </React.Fragment>
                 ))}
             </TableRow>
             <TableRow>
-              <TableCell> windspeed80</TableCell>
+              <TableCell
+                style={{
+                  position: "sticky",
+                  left: 0,
+                  zIndex: 9999,
+                  backgroundColor: "#fff",
+                }}
+              >
+                {" "}
+                windspeed80
+              </TableCell>
               {weatherData1 &&
                 weatherData1.days &&
                 weatherData1.days.length > 0 &&
@@ -727,7 +1097,13 @@ function Data() {
                   <React.Fragment key={dayIndex}>
                     {day.hours &&
                       day.hours.map((hour, hourIndex) => (
-                        <TableCell key={hourIndex} align="right">
+                        <TableCell
+                          key={hourIndex}
+                          align="right"
+                          style={getWindspeed50BackgroundColor(
+                            hour.windspeed80
+                          )}
+                        >
                           {hour.windspeed80}
                         </TableCell>
                       ))}
@@ -735,7 +1111,17 @@ function Data() {
                 ))}
             </TableRow>
             <TableRow>
-              <TableCell> winddir80</TableCell>
+              <TableCell
+                style={{
+                  position: "sticky",
+                  left: 0,
+                  zIndex: 9999,
+                  backgroundColor: "#fff",
+                }}
+              >
+                {" "}
+                winddir80
+              </TableCell>
               {weatherData1 &&
                 weatherData1.days &&
                 weatherData1.days.length > 0 &&
@@ -744,14 +1130,24 @@ function Data() {
                     {day.hours &&
                       day.hours.map((hour, hourIndex) => (
                         <TableCell key={hourIndex} align="right">
-                          {hour.winddir80}
+                          {getWindDirectionIcon1(hour.winddir80)}
                         </TableCell>
                       ))}
                   </React.Fragment>
                 ))}
             </TableRow>
             <TableRow>
-              <TableCell> windspeed100</TableCell>
+              <TableCell
+                style={{
+                  position: "sticky",
+                  left: 0,
+                  zIndex: 9999,
+                  backgroundColor: "#fff",
+                }}
+              >
+                {" "}
+                windspeed100
+              </TableCell>
               {weatherData1 &&
                 weatherData1.days &&
                 weatherData1.days.length > 0 &&
@@ -759,7 +1155,13 @@ function Data() {
                   <React.Fragment key={dayIndex}>
                     {day.hours &&
                       day.hours.map((hour, hourIndex) => (
-                        <TableCell key={hourIndex} align="right">
+                        <TableCell
+                          key={hourIndex}
+                          align="right"
+                          style={getWindspeed50BackgroundColor(
+                            hour.windspeed100
+                          )}
+                        >
                           {hour.windspeed100}
                         </TableCell>
                       ))}
@@ -767,7 +1169,17 @@ function Data() {
                 ))}
             </TableRow>
             <TableRow>
-              <TableCell> winddir100</TableCell>
+              <TableCell
+                style={{
+                  position: "sticky",
+                  left: 0,
+                  zIndex: 9999,
+                  backgroundColor: "#fff",
+                }}
+              >
+                {" "}
+                winddir100
+              </TableCell>
               {weatherData1 &&
                 weatherData1.days &&
                 weatherData1.days.length > 0 &&
@@ -776,14 +1188,24 @@ function Data() {
                     {day.hours &&
                       day.hours.map((hour, hourIndex) => (
                         <TableCell key={hourIndex} align="right">
-                          {hour.winddir100}
+                          {getWindDirectionIcon1(hour.winddir100)}
                         </TableCell>
                       ))}
                   </React.Fragment>
                 ))}
             </TableRow>
             <TableRow>
-              <TableCell> ghiradiation</TableCell>
+              <TableCell
+                style={{
+                  position: "sticky",
+                  left: 0,
+                  zIndex: 9999,
+                  backgroundColor: "#fff",
+                }}
+              >
+                {" "}
+                ghiradiation
+              </TableCell>
               {weatherData1 &&
                 weatherData1.days &&
                 weatherData1.days.length > 0 &&
@@ -799,7 +1221,17 @@ function Data() {
                 ))}
             </TableRow>
             <TableRow>
-              <TableCell> dniradiation</TableCell>
+              <TableCell
+                style={{
+                  position: "sticky",
+                  left: 0,
+                  zIndex: 9999,
+                  backgroundColor: "#fff",
+                }}
+              >
+                {" "}
+                dniradiation
+              </TableCell>
               {weatherData1 &&
                 weatherData1.days &&
                 weatherData1.days.length > 0 &&
@@ -815,7 +1247,17 @@ function Data() {
                 ))}
             </TableRow>
             <TableRow>
-              <TableCell> difradiation</TableCell>
+              <TableCell
+                style={{
+                  position: "sticky",
+                  left: 0,
+                  zIndex: 9999,
+                  backgroundColor: "#fff",
+                }}
+              >
+                {" "}
+                difradiation
+              </TableCell>
               {weatherData1 &&
                 weatherData1.days &&
                 weatherData1.days.length > 0 &&
@@ -831,7 +1273,17 @@ function Data() {
                 ))}
             </TableRow>
             <TableRow>
-              <TableCell> gtiradiation</TableCell>
+              <TableCell
+                style={{
+                  position: "sticky",
+                  left: 0,
+                  zIndex: 9999,
+                  backgroundColor: "#fff",
+                }}
+              >
+                {" "}
+                gtiradiation
+              </TableCell>
               {weatherData1 &&
                 weatherData1.days &&
                 weatherData1.days.length > 0 &&
@@ -847,7 +1299,17 @@ function Data() {
                 ))}
             </TableRow>
             <TableRow>
-              <TableCell> sunelevation</TableCell>
+              <TableCell
+                style={{
+                  position: "sticky",
+                  left: 0,
+                  zIndex: 9999,
+                  backgroundColor: "#fff",
+                }}
+              >
+                {" "}
+                sunelevation
+              </TableCell>
               {weatherData1 &&
                 weatherData1.days &&
                 weatherData1.days.length > 0 &&

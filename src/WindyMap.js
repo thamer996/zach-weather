@@ -7,7 +7,7 @@ function WindyMap() {
   useEffect(() => {
     // Assuming Flask is running on localhost:5000
     // Adjust the URL as needed, especially in production
-    const url = "http://192.168.1.175:5001/ ";
+    const url = " http://127.0.0.1:5001/ ";
     setMapUrl(url);
   }, []);
 
